@@ -1,0 +1,4 @@
+#!/bin/bash
+
+elm make src/*.elm
+rm index.html

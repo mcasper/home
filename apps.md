@@ -14,7 +14,7 @@
 * Auto pull spend from bank?
 
 ## Game score app
-* Name: Scoreboard, Frontend: Rust/actix-web, Backend: Rust/actix-web
+* Name: Scoreboard, Frontend: Elm, Backend: Rust/actix-web
 * Keep long term score for games (sequence)
 * Form teams, run championships, statistics
 
