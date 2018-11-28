@@ -15,7 +15,7 @@ appsSeed =
     [ { name = "Budget", url = "http://localhost:3001" }
     , { name = "Score Keeper", url = "#" }
     , { name = "Team Former", url = "#" }
-    , { name = "Movies", url = "#" }
+    , { name = "Movies", url = "http://localhost:3002" }
     , { name = "Recipes", url = "#" }
     ]
 
