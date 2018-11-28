@@ -1,5 +1,5 @@
 ## Casper app directory
-* Name: Home, Frontend: Elm, Backend: Rust/actix-web
+* Name: Home, Frontend: Elm, Backend: None
 * Portal to all internal Casper apps
 * Google OAuth
 * User model called 'Ghost'
@@ -14,7 +14,7 @@
 * Auto pull spend from bank?
 
 ## Game score app
-* Name: Score, Frontend: Crystal/lucky, Backend: Crystal/lucky
+* Name: Scoreboard, Frontend: Rust/actix-web, Backend: Rust/actix-web
 * Keep long term score for games (sequence)
 * Form teams, run championships, statistics
 
