@@ -1,0 +1,5 @@
+#!/bin/bash
+
+createdb movies_development
+
+psql -f migrations/*.sql movies_development

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+dropdb movies_development
+bin/setup

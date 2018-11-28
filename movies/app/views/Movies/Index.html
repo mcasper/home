@@ -1,0 +1,8 @@
+{{set . "title" "Movies"}}
+{{template "header.html" .}}
+
+{{ range .movies }}
+  <p>{{ .Movie.Title }}</p>
+{{ end }}
+
+{{template "footer.html" .}}
