@@ -1,0 +1,18 @@
+{{set . "title" "Movies - New"}}
+{{template "header.html" .}}
+
+<h1>Track New Movie</h1>
+<form method="POST" action="{{url "Movies.Create"}}" accept-charset="UTF-8">
+  <input name="_utf8" type="hidden" value="✓">
+
+  <div class="form-group">
+    <label for="movieTitle">Title:</label><br />
+    {{with $field := field "movie.Title" .}}
+    <input type="text" class="form-control" id="movieTitle" name="{{$field.Name}}" placeholder="While You Were Sleeping"><br />
+    {{end}}
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{{template "footer.html" .}}

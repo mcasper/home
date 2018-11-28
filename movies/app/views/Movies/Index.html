@@ -1,8 +1,15 @@
-{{set . "title" "Movies"}}
+{{set . "title" "Movies - Index"}}
 {{template "header.html" .}}
 
-{{ range .movies }}
-  <p>{{ .Movie.Title }}</p>
+{{ if not .movies }}
+<p>No movies available</p>
+{{ else }}
+<h1>All Movies</h1>
+<ul class="list-group">
+  {{ range .movies }}
+  <li class="list-group-item">{{ .Title }}</li>
+  {{ end }}
+</ul>
 {{ end }}
 
 {{template "footer.html" .}}

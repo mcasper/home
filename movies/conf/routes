@@ -8,6 +8,9 @@ module:testrunner
 
 
 GET     /                                       Movies.Index
+GET     /movies                                 Movies.Index
+GET     /movies/new                             Movies.New
+POST    /movies                                 Movies.Create
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
