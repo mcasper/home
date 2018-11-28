@@ -1,5 +1,7 @@
 #!/bin/bash
 
-createdb movies_development
+if ! psql -tc "select 1 from pg_database WHERE datname = 'movies_development';" postgres | grep -q 1; then
+  createdb movies_development
+fi
 
-psql -f migrations/*.sql movies_development
+psql -f migrations/*.sql movies_development 2>&1 | grep -v 'already exists, skipping'

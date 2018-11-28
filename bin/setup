@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eou pipefail
+
+APPS=(budget home movies scoreboard)
+for app in ${APPS[@]}; do
+  pushd $app
+
+  if [ -x bin/setup ]; then
+    bin/setup
+  else
+    echo "${app} doesn't have an executable bin/setup script, this is a requirement"
+    exit 1
+  fi
+
+  popd
+done
