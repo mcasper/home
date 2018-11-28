@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export BROWSER=none
+export PORT=3001
+
+exec yarn start

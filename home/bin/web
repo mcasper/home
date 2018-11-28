@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export BROWSER=none
+export PORT=3000
+
+exec elm-app start

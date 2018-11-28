@@ -6,6 +6,11 @@ APPS=(budget home movies scoreboard)
 for app in ${APPS[@]}; do
   pushd $app
 
+  if [ ! -x bin/web ]; then
+    echo "${app} doesn't have an executable bin/web script, this is a requirement"
+    exit 1
+  fi
+
   if [ -x bin/setup ]; then
     bin/setup
   else

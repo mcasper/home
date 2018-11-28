@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export PORT=3002
+
+exec /Users/mattcasper/code/gocode/bin/revel run github.com/mcasper/home/movies

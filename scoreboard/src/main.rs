@@ -1,19 +1,18 @@
 extern crate actix_web;
 extern crate listenfd;
+extern crate scoreboard;
 
-use actix_web::{server, App, HttpRequest};
+use actix_web::server;
 use listenfd::ListenFd;
 use std::env;
-
-fn index(_req: &HttpRequest) -> &'static str {
-    "Hello world!"
-}
+use scoreboard::scores;
 
 fn main() {
     let mut listenfd = ListenFd::from_env();
     let mut server = server::new(|| {
-        App::new()
-            .resource("/", |r| r.f(index))
+        vec![
+            scores::app(),
+        ]
     });
 
     server = if let Some(l) = listenfd.take_tcp_listener(0).unwrap() {
