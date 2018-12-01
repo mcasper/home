@@ -31,3 +31,8 @@
 * Name: Recipes, Frontend: TBD, Backend: TBD
 * Recipe list with links to original
 * Original recipes if we've got any
+
+## Auth
+* Name: Auth, Frontend: Golang, Backend: Golang
+* Responsible for presenting google oauth when not authenticated
+* Responsible for generating JWTs
