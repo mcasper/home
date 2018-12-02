@@ -16,18 +16,6 @@ type Credentials struct {
 	Csecret string `json:"client_secret"`
 }
 
-type User struct {
-	Sub           string `json:"sub"`
-	Name          string `json:"name"`
-	GivenName     string `json:"given_name"`
-	FamilyName    string `json:"family_name"`
-	Profile       string `json:"profile"`
-	Picture       string `json:"picture"`
-	Email         string `json:"email"`
-	EmailVerified string `json:"email_verified"`
-	Gender        string `json:"gender"`
-}
-
 var cred Credentials
 var conf *oauth2.Config
 var port string
@@ -40,8 +28,7 @@ func init() {
 
 	file, err := ioutil.ReadFile("./creds.json")
 	if err != nil {
-		log.Printf("File error: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("File error: %v\n", err)
 	}
 	json.Unmarshal(file, &cred)
 

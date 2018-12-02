@@ -1,4 +1,5 @@
 #!/bin/bash
 
 export PORT=3005
-go run ./*.go
+go build
+./auth

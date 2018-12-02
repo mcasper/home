@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export PORT=9999999
+go test -v

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/Users/mattcasper/code/gocode/bin/revel test github.com/mcasper/home/movies dev

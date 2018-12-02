@@ -2,12 +2,17 @@
 
 set -eou pipefail
 
-APPS=(budget home movies scoreboard-frontend scoreboard-backend)
+APPS=(budget home movies scoreboard-frontend scoreboard-backend auth)
 for app in ${APPS[@]}; do
   pushd $app
 
   if [ ! -x bin/web ]; then
     echo "${app} doesn't have an executable bin/web script, this is a requirement"
+    exit 1
+  fi
+
+  if [ ! -x bin/test ]; then
+    echo "${app} doesn't have an executable bin/test script, this is a requirement"
     exit 1
   fi
 
