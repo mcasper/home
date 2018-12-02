@@ -4,3 +4,4 @@ movies: cd movies && bin/web
 scoreboard-frontend: cd scoreboard-frontend && bin/web
 scoreboard-backend: cd scoreboard-backend && bin/web
 auth: cd auth && bin/web
+router: cd router && bin/web

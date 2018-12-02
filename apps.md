@@ -36,3 +36,7 @@
 * Name: Auth, Frontend: Golang, Backend: Golang
 * Responsible for presenting google oauth when not authenticated
 * Responsible for generating JWTs
+
+## Router
+* Name: Router, Tech: Envoy
+* Responsible for doing path-based service routing, to keep everything under one domain

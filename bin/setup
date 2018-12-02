@@ -2,7 +2,7 @@
 
 set -eou pipefail
 
-APPS=(budget home movies scoreboard-frontend scoreboard-backend auth)
+APPS=(budget home movies scoreboard-frontend scoreboard-backend auth router)
 for app in ${APPS[@]}; do
   pushd $app
 
