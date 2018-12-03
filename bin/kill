@@ -5,3 +5,5 @@ ps aux | grep '[e]lm' | awk '{print $2}' | xargs kill -9
 ps aux | grep '[s]coreboard' | awk '{print $2}' | xargs kill -9
 ps aux | grep '[c]argo' | awk '{print $2}' | xargs kill -9
 ps aux | grep '[r]evel' | awk '{print $2}' | xargs kill -9
+ps aux | grep -E '\./[a]uth' | awk '{print $2}' | xargs kill -9
+docker ps | grep envoy | awk '{print $1}' | xargs docker kill

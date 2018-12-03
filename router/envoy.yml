@@ -8,8 +8,6 @@ static_resources:
     - filters:
       - name: envoy.http_connection_manager
         config:
-          http_protocol_options:
-            accept_http_10: true
           codec_type: auto
           stat_prefix: ingress_http
           access_log:
@@ -19,19 +17,24 @@ static_resources:
           route_config:
             name: local_route
             virtual_hosts:
-            - name: web
+            - name: home
               domains:
               - "*"
               routes:
               - match:
+                  prefix: /scoreboard
+                route:
+                  prefix_rewrite: /
+                  cluster: scoreboard-frontend
+              - match:
                   prefix: /
                 route:
-                  cluster: web
+                  cluster: home
           http_filters:
           - name: envoy.router
             config: {}
   clusters:
-  - name: web
+  - name: home
     health_checks:
       timeout: 1s
       interval: 10s
@@ -46,7 +49,39 @@ static_resources:
     hosts:
     - socket_address:
         address: 127.0.0.1
-        port_value: 3000
+        port_value: 3005
+  - name: scoreboard-frontend
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: scoreboard-frontend
+        port_value: 80
+  - name: scoreboard-backend
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: 127.0.0.1
+        port_value: 3006
 admin:
   access_log_path: /dev/stdout
   address:

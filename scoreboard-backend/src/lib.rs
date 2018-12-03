@@ -4,4 +4,5 @@
 #![deny(warnings)]
 #![allow(unknown_lints)]
 
+pub mod health;
 pub mod scores;

@@ -27,6 +27,7 @@ routeParser : Parser (Route -> a) a
 routeParser =
     oneOf
         [ map MatchesIndex (top <?> Query.string "q")
+        , map MatchesIndex (s "scoreboard" <?> Query.string "q")
         , map MatchesIndex (s "matches" <?> Query.string "q")
         , map MatchesNew (s "matches" </> s "new")
         ]

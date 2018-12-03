@@ -1,16 +1,21 @@
 extern crate actix_web;
+extern crate env_logger;
 extern crate listenfd;
 extern crate scoreboard;
 
 use actix_web::server;
 use listenfd::ListenFd;
 use std::env;
-use scoreboard::scores;
+use scoreboard::{health, scores};
 
 fn main() {
+    env::set_var("RUST_LOG", "actix_web=info");
+    env_logger::init();
+
     let mut listenfd = ListenFd::from_env();
     let mut server = server::new(|| {
         vec![
+            health::app(),
             scores::app(),
         ]
     });
