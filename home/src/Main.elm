@@ -5,19 +5,47 @@ import Browser.Navigation as Nav
 import Html exposing (Html, a, div, h1, img, nav, p, text, ul)
 import Html.Attributes exposing (class, href, src, style, title)
 import Url
+import Url.Parser exposing ((</>), (<?>), Parser, int, map, oneOf, s, string, top)
+import Url.Parser.Query as Query
 
 
 
 ---- DATA ----
 
 
-appsSeed =
-    [ { name = "Budget", url = "http://localhost:3001" }
-    , { name = "Scoreboard", url = "http://localhost:3004" }
+developmentSeed =
+    [ { name = "Budget", url = "http://localhost:3000/budget" }
+    , { name = "Scoreboard", url = "http://localhost:3000/scoreboard" }
     , { name = "Teams", url = "#" }
-    , { name = "Movies", url = "http://localhost:3002" }
-    , { name = "Recipes", url = "#" }
+    , { name = "Movies", url = "http://localhost:3000/movies" }
+    , { name = "Recipes", url = "http://localhost:3000/recipes" }
     ]
+
+productionSeed =
+    [ { name = "Budget", url = "https://casper.coffee/budget" }
+    , { name = "Scoreboard", url = "https://casper.coffee/scoreboard" }
+    , { name = "Teams", url = "#" }
+    , { name = "Movies", url = "https://casper.coffee/movies" }
+    , { name = "Recipes", url = "https://casper.coffee/recipes" }
+    ]
+
+
+---- ROUTES ----
+
+type Route
+    = Apps
+
+
+parseRoute : Url.Url -> Maybe Route
+parseRoute url =
+    Url.Parser.parse routeParser url
+
+
+routeParser : Parser (Route -> a) a
+routeParser =
+    oneOf
+        [ map Apps top
+        ]
 
 
 
@@ -32,16 +60,35 @@ type alias App =
     { name : String, url : String }
 
 
+type alias Config =
+    { node_env : String }
+
+
 type alias Model =
-    { apps : Apps
+    { config : Config
+    , apps : Apps
     , key : Nav.Key
     , url : Url.Url
+    , route : Maybe Route
     }
 
 
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init flags url key =
-    ( Model appsSeed key url, Cmd.none )
+seedFromConfig : Config -> Apps
+seedFromConfig config =
+  case config.node_env of
+    "development" ->
+      developmentSeed
+
+    "production" ->
+      productionSeed
+
+    _ ->
+      developmentSeed
+
+
+init : Config -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init config url key =
+    ( Model config (seedFromConfig config) key url (parseRoute url), Cmd.none )
 
 
 
@@ -60,7 +107,11 @@ update msg model =
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
-                    ( model, Nav.pushUrl model.key (Url.toString url) )
+                  case (parseRoute url) of
+                    Nothing ->
+                      ( model, Nav.load (Url.toString url) )
+                    Just _ ->
+                      ( model, Nav.pushUrl model.key (Url.toString url) )
 
                 Browser.External href ->
                     ( model, Nav.load href )
@@ -117,7 +168,7 @@ viewApp app =
 ---- PROGRAM ----
 
 
-main : Program () Model Msg
+main : Program Config Model Msg
 main =
     Browser.application
         { init = init

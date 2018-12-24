@@ -7,9 +7,14 @@ services:
       - /Users/mattcasper/code/home/home/router/envoy.yml:/etc/envoy/envoy.yaml
     links:
        - scoreboard-frontend
+       - home
     ports:
       - "9901:9901"
       - "3000:9000"
+  home:
+    build: home/
+    command: nginx -g 'daemon off;'
+    network_mode: bridge
   scoreboard-frontend:
     build: scoreboard-frontend/
     command: nginx -g 'daemon off;'

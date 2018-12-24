@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eou pipefail
+
 export PORT=3005
 go build
 ./auth

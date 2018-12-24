@@ -194,7 +194,11 @@ update msg model =
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
-                    ( model, Nav.pushUrl model.key (Url.toString url) )
+                  case (parseRoute url) of
+                    Nothing ->
+                      ( model, Nav.load (Url.toString url) )
+                    Just _ ->
+                      ( model, Nav.pushUrl model.key (Url.toString url) )
 
                 Browser.External href ->
                     ( model, Nav.load href )
