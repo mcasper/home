@@ -1,6 +1,6 @@
 {
-  "short_name": "Elm App",
-  "name": "Create Elm App Sample",
+  "short_name": "Home",
+  "name": "Home",
   "icons": [
     {
       "src": "favicon.ico",
