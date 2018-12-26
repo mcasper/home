@@ -24,7 +24,6 @@ static_resources:
               - match:
                   prefix: /scoreboard
                 route:
-                  prefix_rewrite: /
                   cluster: scoreboard-frontend
               - match:
                   prefix: /

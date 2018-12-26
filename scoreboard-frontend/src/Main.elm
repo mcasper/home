@@ -26,10 +26,9 @@ parseRoute url =
 routeParser : Parser (Route -> a) a
 routeParser =
     oneOf
-        [ map MatchesIndex (top <?> Query.string "q")
-        , map MatchesIndex (s "scoreboard" <?> Query.string "q")
-        , map MatchesIndex (s "matches" <?> Query.string "q")
-        , map MatchesNew (s "matches" </> s "new")
+        [ map MatchesIndex (s "scoreboard" <?> Query.string "q")
+        , map MatchesIndex (s "scoreboard" </> s "matches" <?> Query.string "q")
+        , map MatchesNew (s "scoreboard" </> s "matches" </> s "new")
         ]
 
 
@@ -194,11 +193,12 @@ update msg model =
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
-                  case (parseRoute url) of
-                    Nothing ->
-                      ( model, Nav.load (Url.toString url) )
-                    Just _ ->
-                      ( model, Nav.pushUrl model.key (Url.toString url) )
+                    case parseRoute url of
+                        Nothing ->
+                            ( model, Nav.load (Url.toString url) )
+
+                        Just _ ->
+                            ( model, Nav.pushUrl model.key (Url.toString url) )
 
                 Browser.External href ->
                     ( model, Nav.load href )
