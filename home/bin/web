@@ -4,5 +4,6 @@ set -eou pipefail
 
 export BROWSER=none
 export PORT=3006
+export PUBLIC_URL=/
 
 exec elm-app start
