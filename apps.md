@@ -28,7 +28,7 @@
 * Possibly market to lettows
 
 ## Recipe index
-* Name: Recipes, Frontend: TBD, Backend: TBD
+* Name: Recipes, Frontend: Rails, Backend: Rails
 * Recipe list with links to original
 * Original recipes if we've got any
 

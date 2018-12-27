@@ -1,0 +1,7 @@
+#!/Users/mattcasper/.rbenv/shims/ruby
+
+require 'bundler'
+
+Bundler.with_clean_env do
+  exec("bundle exec rails s --port 3007")
+end

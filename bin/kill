@@ -1,11 +1,27 @@
 #!/bin/bash
 
-set -eou pipefail
+set -eou
 
+echo "Stopping react"
 ps aux | grep '[r]eact' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping elm"
 ps aux | grep '[e]lm' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping scoreboard"
 ps aux | grep '[s]coreboard' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping cargo"
 ps aux | grep '[c]argo' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping revel"
 ps aux | grep '[r]evel' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping rails"
+ps aux | grep '[r]ails' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping auth"
 ps aux | grep -E '\./[a]uth' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping router"
 docker ps | grep envoy | awk '{print $1}' | xargs docker kill
