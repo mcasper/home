@@ -26,6 +26,10 @@ static_resources:
                 route:
                   cluster: scoreboard-frontend
               - match:
+                  prefix: /recipes
+                route:
+                  cluster: recipes
+              - match:
                   prefix: /
                 route:
                   cluster: home
@@ -52,6 +56,16 @@ static_resources:
     - socket_address:
         address: docker.for.mac.localhost
         port_value: 3004
+
+  - name: recipes
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: docker.for.mac.localhost
+        port_value: 3007
 
 admin:
   access_log_path: /dev/stdout
