@@ -27,7 +27,6 @@ ADD config         $APP_HOME/config
 ADD db             $APP_HOME/db
 ADD lib            $APP_HOME/lib
 ADD public         $APP_HOME/public
-ADD vendor         $APP_HOME/vendor
 ADD app            $APP_HOME/app
 
 RUN bundle exec rails assets:precompile
