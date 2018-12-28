@@ -8,15 +8,15 @@ setup:
 
 build:
   docker:
-    router: router/Dockerfile
+    web: router/Dockerfile
     home: home/Dockerfile
     scoreboard-frontend: scoreboard-frontend/Dockerfile
     recipes: recipes/Dockerfile
 
-# release:
-#   image: recipes
-#   command:
-#     - bundle exec rails db:create db:migrate
+release:
+  image: recipes
+  command:
+    - bundle exec rails db:migrate
 
 run:
   home: nginx -g 'daemon off;'
