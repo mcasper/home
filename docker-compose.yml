@@ -8,14 +8,25 @@ services:
     links:
        - scoreboard-frontend
        - home
+       - recipes
     ports:
       - "9901:9901"
       - "3000:9000"
+
   home:
     build: home/
     command: nginx -g 'daemon off;'
     network_mode: bridge
+    env_file: ./.env
+
   scoreboard-frontend:
     build: scoreboard-frontend/
     command: nginx -g 'daemon off;'
     network_mode: bridge
+    env_file: ./.env
+
+  recipes:
+    build: recipes/
+    command: bundle exec rails s -b 0.0.0.0 -p 80
+    network_mode: bridge
+    env_file: ./.env

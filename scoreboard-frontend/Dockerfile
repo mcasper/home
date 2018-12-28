@@ -11,5 +11,5 @@ RUN /node_modules/create-elm-app/bin/elm-app-cli.js build
 
 FROM nginx
 
-COPY --from=builder build/ /usr/share/nginx/html
+COPY --from=builder build/ /usr/share/nginx/html/scoreboard
 RUN echo "OK" > /usr/share/nginx/html/health

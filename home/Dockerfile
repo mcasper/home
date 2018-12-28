@@ -6,7 +6,6 @@ ADD elm.json elm.json
 ADD src/ src/
 ADD public/ public/
 
-ENV ELM_APP_MODE=localCluster
 ENV PUBLIC_URL=/
 RUN /node_modules/create-elm-app/bin/elm-app-cli.js build
 

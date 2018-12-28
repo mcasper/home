@@ -4,6 +4,12 @@ default: &default
  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
  host: localhost
 
+production:
+ <<: *default
+ host: <%= ENV.fetch("DATABASE_HOST") %>
+ username: postgres
+ database: recipes
+
 development:
  <<: *default
  database: recipes_development
