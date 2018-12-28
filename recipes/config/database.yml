@@ -6,9 +6,7 @@ default: &default
 
 production:
  <<: *default
- host: <%= ENV.fetch("DATABASE_HOST") %>
- username: postgres
- database: recipes
+ url: <%= ENV.fetch("RECIPE_DATABASE_URL") %>
 
 development:
  <<: *default
