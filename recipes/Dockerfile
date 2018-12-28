@@ -1,4 +1,4 @@
-FROM ruby:2.6.0-rc2-alpine
+FROM ruby:2.6.0-alpine
 
 RUN \
   apk add --update --no-cache --virtual .build-deps \
