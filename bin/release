@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -eou pipefail
+
+APPS=(home scoreboard-frontend router recipes)
+for app in ${APPS[@]}; do
+  pushd $app
+
+  if [ -x bin/release ]; then
+    bin/release
+  else
+    TAG=mcasper/home-$app:$(git rev-parse HEAD)
+    docker build -t $TAG .
+    docker push $TAG
+  fi
+
+  popd
+done

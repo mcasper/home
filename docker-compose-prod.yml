@@ -1,0 +1,46 @@
+version: '3'
+services:
+  router:
+    image: mcasper/home-router:${TAG}
+    network_mode: bridge
+    links:
+       - scoreboard-frontend
+       - home
+       - recipes
+    ports:
+      - "9901:9901"
+      - "80:9000"
+
+  db:
+    image: postgres:11
+    network_mode: bridge
+    restart: always
+    env_file: .postgres.env
+    volumes:
+      - /data:/var/lib/postgresql/data
+
+  home:
+    image: mcasper/home-home:${TAG}
+    command: nginx -g 'daemon off;'
+    restart: on-failure
+    network_mode: bridge
+    env_file: ./.env
+
+  scoreboard-frontend:
+    image: mcasper/home-scoreboard-frontend:${TAG}
+    command: nginx -g 'daemon off;'
+    restart: on-failure
+    network_mode: bridge
+    env_file: ./.env
+
+  recipes:
+    image: mcasper/home-recipes:${TAG}
+    command: bundle exec rails s -b 0.0.0.0 -p 80
+    restart: on-failure
+    network_mode: bridge
+    links:
+      - db
+    env_file: ./.env
+    environment:
+      RAILS_LOG_TO_STDOUT: 'true'
+      RAILS_SERVE_STATIC_FILES: 'true'
