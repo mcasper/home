@@ -12,6 +12,7 @@ RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
 ENV RAILS_ENV production
+ENV ROOT_DOMAIN https://casper.coffee
 
 ADD Gemfile* $APP_HOME/
 
