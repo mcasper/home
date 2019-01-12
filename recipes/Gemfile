@@ -23,5 +23,11 @@ group :development do
   gem "annotate"
   gem "listen"
   gem "spring"
-  gem "spring-watcher-listen", "~> 2.0.0"
+  gem "spring-watcher-listen"
+end
+
+group :test do
+  gem "rspec-rails"
+  gem "rubocop-rspec"
+  gem "spring-commands-rspec"
 end

@@ -1,3 +1,5 @@
+require: rubocop-rspec
+
 AllCops:
   Exclude:
     - "bin/**/*"
@@ -8,6 +10,9 @@ AllCops:
 
 Rails:
   Enabled: true
+
+RSpec/MultipleExpectations:
+  Max: 2
 
 Style/WordArray:
   EnforcedStyle: brackets
