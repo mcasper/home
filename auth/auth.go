@@ -84,7 +84,12 @@ func newToken(profileInfo ProfileInfo) (string, error) {
 }
 
 func ecdsaPrivateKey() *ecdsa.PrivateKey {
-	data, err := ioutil.ReadFile("./key.pem")
+	jwt_key_path = os.Getenv("JWT_KEY_PATH")
+	if jwt_key_path == "" {
+		log.Fatal("JWT_KEY_PATH is not set")
+	}
+
+	data, err := ioutil.ReadFile(jwt_key_path)
 	if err != nil {
 		log.Fatal("Error reading private key file: ", err)
 	}

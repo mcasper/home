@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   router:
     image: mcasper/home-router:${TAG}
@@ -22,33 +22,41 @@ services:
 
   home:
     image: mcasper/home-home:${TAG}
-    command: nginx -g 'daemon off;'
+    command: nginx -g "daemon off;"
     restart: on-failure
     network_mode: bridge
     env_file: ./.env
 
   scoreboard-frontend:
     image: mcasper/home-scoreboard-frontend:${TAG}
-    command: nginx -g 'daemon off;'
+    command: nginx -g "daemon off;"
     restart: on-failure
     network_mode: bridge
     env_file: ./.env
 
   auth:
     image: mcasper/home-auth:${TAG}
-    command: /go/bin/auth
+    command: /go/src/auth/auth
     restart: on-failure
     network_mode: bridge
+    volumes:
+      - "keys:keys"
     env_file: ./.env
+    environment:
+      PORT: 80
+      JWT_KEY_PATH: "keys/key.pem"
 
   recipes:
     image: mcasper/home-recipes:${TAG}
     command: bundle exec rails s -b 0.0.0.0 -p 80
     restart: on-failure
     network_mode: bridge
+    volumes:
+      - "keys:keys"
     links:
       - db
     env_file: ./.env
     environment:
-      RAILS_LOG_TO_STDOUT: 'true'
-      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_LOG_TO_STDOUT: "true"
+      RAILS_SERVE_STATIC_FILES: "true"
+      JWT_KEY_PATH: "keys/key.pem"

@@ -23,6 +23,6 @@ class ApplicationController < ActionController::Base
   end
 
   def ecdsa_key
-    OpenSSL::PKey::EC.new(File.read(Rails.root.join("..", "auth", "key.pem")))
+    OpenSSL::PKey::EC.new(File.read(Rails.root.join("..", "auth", ENV.fetch("JWT_KEY_PATH"))))
   end
 end

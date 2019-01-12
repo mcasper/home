@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eou pipefail
+
 TAG=$(git rev-parse HEAD)
 SERVER_IP=68.183.251.146
 
