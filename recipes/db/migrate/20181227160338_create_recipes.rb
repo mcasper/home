@@ -3,6 +3,8 @@ class CreateRecipes < ActiveRecord::Migration[5.2]
     create_table :recipes do |t|
       t.text :name, null: false
       t.text :url, null: false
+
+      t.timestamps
     end
   end
 end
