@@ -27,6 +27,11 @@ static_resources:
                   cluster: scoreboard-frontend
 
               - match:
+                  prefix: /auth
+                route:
+                  cluster: auth
+
+              - match:
                   prefix: /recipes
                 route:
                   cluster: recipes
@@ -39,23 +44,6 @@ static_resources:
           - name: envoy.router
             config: {}
   clusters:
-  - name: home
-    health_checks:
-      timeout: 1s
-      interval: 10s
-      unhealthy_threshold: 3
-      healthy_threshold: 1
-      http_health_check:
-        path: "/health"
-    connect_timeout: 2.5s
-    type: strict_dns
-    lb_policy: round_robin
-    max_requests_per_connection: 1
-    hosts:
-    - socket_address:
-        address: home
-        port_value: 80
-
   - name: scoreboard-frontend
     health_checks:
       timeout: 1s
@@ -73,6 +61,23 @@ static_resources:
         address: scoreboard-frontend
         port_value: 80
 
+  - name: auth
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: auth
+        port_value: 80
+
   - name: recipes
     health_checks:
       timeout: 1s
@@ -88,6 +93,23 @@ static_resources:
     hosts:
     - socket_address:
         address: recipes
+        port_value: 80
+
+  - name: home
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: home
         port_value: 80
 
 admin:

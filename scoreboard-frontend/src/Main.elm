@@ -257,9 +257,9 @@ viewBody model =
 viewNav =
     nav [ class "navbar navbar-dark bg-dark", style "height" "70px", style "color" "white" ]
         [ div []
-            [ a [ href "/", style "text-decoration" "none", style "color" "white" ] [ text "Scoreboard" ]
+            [ a [ href "/scoreboard", style "text-decoration" "none", style "color" "white" ] [ text "Scoreboard" ]
             , text "\n|\n"
-            , a [ href "http://localhost:3000/", style "text-decoration" "none", style "color" "white" ] [ text "Back to Home" ]
+            , a [ href "/", style "text-decoration" "none", style "color" "white" ] [ text "Back to Home" ]
             ]
         , div []
             [ a [ href "/matches/new", style "text-decoration" "none", style "color" "white" ]

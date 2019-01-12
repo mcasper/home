@@ -17,6 +17,10 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+Dotenv::Railtie.load
+
+ROOT_DOMAIN = ENV.fetch("ROOT_DOMAIN")
+
 module Recipes
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

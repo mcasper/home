@@ -1,10 +1,11 @@
 #!/bin/bash
 
 TAG=$(git rev-parse HEAD)
+SERVER_IP=68.183.251.146
 
 scp docker-compose-prod.yml root@68.183.251.146:docker-compose.yml
-ssh root@68.183.251.146 TAG=$TAG docker-compose up --force-recreate --remove-orphans -d
+ssh root@$SERVER_IP TAG=$TAG docker-compose up --force-recreate --remove-orphans -d
 
 sleep 5
 
-ssh root@68.183.251.146 TAG=$TAG docker-compose run recipes bundle exec rails db:create db:migrate
+ssh root@$SERVER_IP TAG=$TAG docker-compose run recipes bundle exec rails db:create db:migrate
