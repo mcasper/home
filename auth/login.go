@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/base64"
+	"html/template"
+	"log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -34,5 +36,14 @@ func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &stateCookie)
 	http.SetCookie(w, &returnToCookie)
 
-	w.Write([]byte("<html><title>Golang Google</title> <body> <a href='" + getLoginURL(state) + "'><button>Login with Google!</button> </a> </body></html>"))
+	template, templateErr := template.New("login.html").ParseFiles("templates/login.html")
+	if templateErr != nil {
+		log.Fatal("Parse: ", templateErr)
+		return
+	}
+	executeErr := template.Execute(w, getLoginURL(state))
+	if executeErr != nil {
+		log.Fatal("Execute: ", executeErr)
+		return
+	}
 }

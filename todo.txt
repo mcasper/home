@@ -1,0 +1,9 @@
+[recipes] - empty list page
+[auth] - email whitelist
+[auth] - return jwt in header
+[cluster] - implicit auth between apps
+[recipes] - add categories to recipes
+[recipes] - group and filter by recipes
+[recipes] - tests for everything
+[auth] - tests for everything
+[budget] - investigate plaid
