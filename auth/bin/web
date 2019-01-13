@@ -4,6 +4,8 @@ set -eou pipefail
 
 export PORT=3005
 export ROOT_DOMAIN=http://localhost:3000
+export GOOGLE_CREDS_PATH=./creds.json
+
 go get -d -v
 go build
 ./auth

@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
 type ProfileInfo struct {
@@ -84,7 +85,7 @@ func newToken(profileInfo ProfileInfo) (string, error) {
 }
 
 func ecdsaPrivateKey() *ecdsa.PrivateKey {
-	jwt_key_path = os.Getenv("JWT_KEY_PATH")
+	jwt_key_path := os.Getenv("JWT_KEY_PATH")
 	if jwt_key_path == "" {
 		log.Fatal("JWT_KEY_PATH is not set")
 	}

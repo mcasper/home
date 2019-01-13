@@ -20,6 +20,7 @@ var cred Credentials
 var conf *oauth2.Config
 var port string
 var root_domain string
+var google_creds_path string
 
 func init() {
 	port = os.Getenv("PORT")
@@ -32,7 +33,12 @@ func init() {
 		log.Fatal("ROOT_DOMAIN is not set, unable to start http server")
 	}
 
-	file, err := ioutil.ReadFile("./creds.json")
+	google_creds_path = os.Getenv("GOOGLE_CREDS_PATH")
+	if google_creds_path == "" {
+		log.Fatal("GOOGLE_CREDS_PATH is not set, unable to start http server")
+	}
+
+	file, err := ioutil.ReadFile(google_creds_path)
 	if err != nil {
 		log.Fatalf("File error: %v\n", err)
 	}

@@ -40,11 +40,12 @@ services:
     restart: on-failure
     network_mode: bridge
     volumes:
-      - "keys:keys"
+      - "./keys:/keys"
     env_file: ./.env
     environment:
       PORT: 80
-      JWT_KEY_PATH: "keys/key.pem"
+      JWT_KEY_PATH: "/keys/key.pem"
+      GOOGLE_CREDS_PATH: "/keys/google_creds.json"
 
   recipes:
     image: mcasper/home-recipes:${TAG}
@@ -52,11 +53,14 @@ services:
     restart: on-failure
     network_mode: bridge
     volumes:
-      - "keys:keys"
+      - "./keys:/keys"
     links:
       - db
     env_file: ./.env
     environment:
       RAILS_LOG_TO_STDOUT: "true"
       RAILS_SERVE_STATIC_FILES: "true"
-      JWT_KEY_PATH: "keys/key.pem"
+      JWT_KEY_PATH: "/keys/key.pem"
+
+volumes:
+  keys:
