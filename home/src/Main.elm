@@ -4,6 +4,8 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (Html, a, div, h1, img, nav, p, text, ul)
 import Html.Attributes exposing (class, href, src, style, title)
+import Http
+import Json.Decode as Json
 import Url
 import Url.Parser exposing ((</>), (<?>), Parser, int, map, oneOf, s, string, top)
 import Url.Parser.Query as Query
@@ -21,6 +23,7 @@ developmentSeed =
     , { name = "Recipes", url = "http://localhost:3000/recipes" }
     ]
 
+
 productionSeed =
     [ { name = "Budget", url = "https://casper.coffee/budget" }
     , { name = "Scoreboard", url = "https://casper.coffee/scoreboard" }
@@ -30,7 +33,9 @@ productionSeed =
     ]
 
 
+
 ---- ROUTES ----
+
 
 type Route
     = Apps
@@ -49,7 +54,35 @@ routeParser =
 
 
 
+---- JWT ----
+
+
+getMe : String -> Cmd Msg
+getMe token =
+    Http.send GotMe <|
+        Http.request
+            { method = "GET"
+            , url = "http://localhost:3000/auth/me"
+            , expect = Http.expectJson userDecoder
+            , headers = [ Http.header "Authorization" ("Bearer " ++ token) ]
+            , body = Http.emptyBody
+            , timeout = Nothing
+            , withCredentials = False
+            }
+
+
+userDecoder : Json.Decoder User
+userDecoder =
+    Json.map User
+        (Json.field "name" Json.string)
+
+
+
 ---- MODEL ----
+
+
+type alias User =
+    { name : String }
 
 
 type alias Apps =
@@ -62,7 +95,8 @@ type alias App =
 
 type alias Config =
     { node_env : String
-    , session : String }
+    , session : String
+    }
 
 
 type alias Model =
@@ -71,25 +105,38 @@ type alias Model =
     , key : Nav.Key
     , url : Url.Url
     , route : Maybe Route
+    , isAuthed : Bool
     }
 
 
 seedFromConfig : Config -> Apps
 seedFromConfig config =
-  case config.node_env of
-    "development" ->
-      developmentSeed
+    case config.node_env of
+        "development" ->
+            developmentSeed
 
-    "production" ->
-      productionSeed
+        "production" ->
+            productionSeed
 
-    _ ->
-      developmentSeed
+        _ ->
+            developmentSeed
 
 
 init : Config -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init config url key =
-    ( Model config (seedFromConfig config) key url (parseRoute url), Cmd.none )
+    ( { config = config
+      , apps = seedFromConfig config
+      , key = key
+      , url = url
+      , route = parseRoute url
+      , isAuthed = False
+      }
+    , if config.session == "" then
+        redirectToAuth
+
+      else
+        getMe config.session
+    )
 
 
 
@@ -100,6 +147,7 @@ type Msg
     = NoOp
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
+    | GotMe (Result Http.Error User)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -108,20 +156,32 @@ update msg model =
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
-                  case (parseRoute url) of
-                    Nothing ->
-                      ( model, Nav.load (Url.toString url) )
-                    Just _ ->
-                      ( model, Nav.pushUrl model.key (Url.toString url) )
+                    case parseRoute url of
+                        Nothing ->
+                            ( model, Nav.load (Url.toString url) )
+
+                        Just _ ->
+                            ( model, Nav.pushUrl model.key (Url.toString url) )
 
                 Browser.External href ->
                     ( model, Nav.load href )
 
-        UrlChanged url ->
+        UrlChanged _ ->
             ( model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
+
+        GotMe (Ok user) ->
+            ( { model | isAuthed = True }, Cmd.none )
+
+        GotMe (Err error) ->
+            ( model, redirectToAuth )
+
+
+redirectToAuth : Cmd Msg
+redirectToAuth =
+    Nav.load "http://localhost:3000/auth/login?returnTo=http://localhost:3000/"
 
 
 
@@ -130,9 +190,16 @@ update msg model =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "Home"
-    , body = [ viewBody model ]
-    }
+    case model.isAuthed of
+        True ->
+            { title = "Home"
+            , body = [ viewBody model ]
+            }
+
+        False ->
+            { title = "Home"
+            , body = [ unauthenticatedView ]
+            }
 
 
 viewBody : Model -> Html Msg
@@ -163,6 +230,11 @@ viewApp app =
             [ p [ style "margin" "auto", style "text-align" "center" ] [ text app.name ]
             ]
         ]
+
+
+unauthenticatedView : Html Msg
+unauthenticatedView =
+    div [] [ text "Please authenticate" ]
 
 
 

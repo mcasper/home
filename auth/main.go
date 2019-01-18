@@ -62,5 +62,13 @@ func main() {
 	http.Handle("/auth/login", &loginHandler{})
 	http.Handle("/auth", &loginHandler{})
 	http.Handle("/auth/consume", &authHandler{})
-	http.ListenAndServe(":"+port, nil)
+	http.Handle("/auth/me", &meHandler{})
+	log.Fatal(http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux)))
+}
+
+func logRequest(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
+	})
 }
