@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 type ProfileInfo struct {
@@ -71,6 +72,17 @@ func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	redirectTo := retrievedReturnToCookie.Value + "?key=" + jwt
+
+	cookieExpiration := time.Now().Add(24 * time.Hour)
+	sessionCookie := http.Cookie{
+		Name:    "home_session",
+		Value:   jwt,
+		Expires: cookieExpiration,
+		// Secure:   true,
+		HttpOnly: false,
+		Path:     "/",
+	}
+	http.SetCookie(w, &sessionCookie)
 
 	http.Redirect(w, r, redirectTo, 302)
 }

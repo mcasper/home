@@ -1,3 +1,5 @@
+[home] - implement auth
+[scoreboard-frontend] - implement auth
 [recipes] - empty list page
 [auth] - email whitelist
 [auth] - return jwt in header
@@ -7,3 +9,6 @@
 [recipes] - tests for everything
 [auth] - tests for everything
 [budget] - investigate plaid
+[auth] - add jwt expiration
+  [cluster] - respect expiration
+[auth] - set secure cookies in prod (behind ssl)

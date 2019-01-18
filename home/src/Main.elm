@@ -61,7 +61,8 @@ type alias App =
 
 
 type alias Config =
-    { node_env : String }
+    { node_env : String
+    , session : String }
 
 
 type alias Model =
