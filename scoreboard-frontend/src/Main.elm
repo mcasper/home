@@ -4,6 +4,8 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (Html, a, div, h1, img, nav, p, text, ul)
 import Html.Attributes exposing (class, href, src, style, title)
+import Http
+import Json.Decode as Json
 import Url
 import Url.Parser exposing ((</>), (<?>), Parser, int, map, oneOf, s, string, top)
 import Url.Parser.Query as Query
@@ -30,6 +32,30 @@ routeParser =
         , map MatchesIndex (s "scoreboard" </> s "matches" <?> Query.string "q")
         , map MatchesNew (s "scoreboard" </> s "matches" </> s "new")
         ]
+
+
+
+---- JWT ----
+
+
+getMe : String -> Cmd Msg
+getMe token =
+    Http.send GotMe <|
+        Http.request
+            { method = "GET"
+            , url = "http://localhost:3000/auth/me"
+            , expect = Http.expectJson userDecoder
+            , headers = [ Http.header "Authorization" ("Bearer " ++ token) ]
+            , body = Http.emptyBody
+            , timeout = Nothing
+            , withCredentials = False
+            }
+
+
+userDecoder : Json.Decoder User
+userDecoder =
+    Json.map User
+        (Json.field "name" Json.string)
 
 
 
@@ -164,17 +190,39 @@ matchesSeed =
 ---- MODEL ----
 
 
+type alias User =
+    { name : String }
+
+
+type alias Config =
+    { session : String }
+
+
 type alias Model =
-    { key : Nav.Key
+    { config : Config
+    , key : Nav.Key
     , url : Url.Url
     , route : Maybe Route
     , matches : List Match
+    , isAuthed : Bool
     }
 
 
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init flags url key =
-    ( Model key url (parseRoute url) matchesSeed, Cmd.none )
+init : Config -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init config url key =
+    ( { config = config
+      , key = key
+      , url = url
+      , route = parseRoute url
+      , matches = matchesSeed
+      , isAuthed = False
+      }
+    , if config.session == "" then
+        redirectToAuth
+
+      else
+        getMe config.session
+    )
 
 
 
@@ -185,6 +233,7 @@ type Msg
     = NoOp
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
+    | GotMe (Result Http.Error User)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -209,6 +258,17 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        GotMe (Ok user) ->
+            ( { model | isAuthed = True }, Cmd.none )
+
+        GotMe (Err error) ->
+            ( model, redirectToAuth )
+
+
+redirectToAuth : Cmd Msg
+redirectToAuth =
+    Nav.load "http://localhost:3000/auth/login?returnTo=http://localhost:3000/scoreboard"
+
 
 
 ---- VIEW ----
@@ -216,9 +276,16 @@ update msg model =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = titleForRoute model.route
-    , body = [ viewBody model ]
-    }
+    case model.isAuthed of
+        True ->
+            { title = titleForRoute model.route
+            , body = [ viewBody model ]
+            }
+
+        False ->
+            { title = titleForRoute model.route
+            , body = [ unauthenticatedView ]
+            }
 
 
 titleForRoute : Maybe Route -> String
@@ -306,11 +373,16 @@ viewTeam team =
         ]
 
 
+unauthenticatedView : Html Msg
+unauthenticatedView =
+    div [] [ text "Please authenticate" ]
+
+
 
 ---- PROGRAM ----
 
 
-main : Program () Model Msg
+main : Program Config Model Msg
 main =
     Browser.application
         { init = init
