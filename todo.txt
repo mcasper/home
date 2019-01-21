@@ -1,4 +1,3 @@
-[auth] - email whitelist
 [auth] - return jwt in header, remove from params
 [auth] - add jwt expiration
   [cluster] - respect expiration

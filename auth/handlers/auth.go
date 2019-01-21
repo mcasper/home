@@ -60,6 +60,12 @@ func (h *AuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	profileInfoJson, _ := ioutil.ReadAll(profileHandle.Body)
 	var profileInfo token.ProfileInfo
 	json.Unmarshal(profileInfoJson, &profileInfo)
+
+	if !whitelistedEmail(profileInfo.Email) {
+		http.Redirect(w, r, "/auth/unauthorized", 302)
+		return
+	}
+
 	jwt, jwtErr := token.NewToken(profileInfo)
 	if jwtErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -80,4 +86,24 @@ func (h *AuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &sessionCookie)
 
 	http.Redirect(w, r, redirectTo, 302)
+}
+
+func whitelistedEmail(email string) bool {
+	return contains(emailWhitelist(), email)
+}
+
+func emailWhitelist() []string {
+	return []string{
+		"matthewvcasper@gmail.com",
+		"ashlynccasper@gmail.com",
+	}
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
