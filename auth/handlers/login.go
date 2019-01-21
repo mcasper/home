@@ -1,6 +1,8 @@
-package main
+package handlers
 
 import (
+	"golang.org/x/oauth2"
+
 	"encoding/base64"
 	"html/template"
 	"log"
@@ -9,19 +11,17 @@ import (
 	"time"
 )
 
-func getLoginURL(state string) string {
-	return conf.AuthCodeURL(state)
-}
-
 func randToken() string {
 	b := make([]byte, 32)
 	rand.Read(b)
 	return base64.StdEncoding.EncodeToString(b)
 }
 
-type loginHandler struct{}
+type LoginHandler struct {
+	Conf *oauth2.Config
+}
 
-func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *LoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	returnTo := r.FormValue("returnTo")
 	if returnTo == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -41,7 +41,7 @@ func (h *loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("Parse: ", templateErr)
 		return
 	}
-	executeErr := template.Execute(w, getLoginURL(state))
+	executeErr := template.Execute(w, h.Conf.AuthCodeURL(state))
 	if executeErr != nil {
 		log.Fatal("Execute: ", executeErr)
 		return

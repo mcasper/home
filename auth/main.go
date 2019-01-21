@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/mcasper/home/auth/handlers"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 
@@ -59,10 +60,10 @@ func init() {
 func main() {
 	log.Println("Starting up http server on :" + port)
 
-	http.Handle("/auth/login", &loginHandler{})
-	http.Handle("/auth", &loginHandler{})
-	http.Handle("/auth/consume", &authHandler{})
-	http.Handle("/auth/me", &meHandler{})
+	http.Handle("/auth/login", &handlers.LoginHandler{Conf: conf})
+	http.Handle("/auth", &handlers.LoginHandler{Conf: conf})
+	http.Handle("/auth/consume", &handlers.AuthHandler{Conf: conf})
+	http.Handle("/auth/me", &handlers.MeHandler{})
 	log.Fatal(http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux)))
 }
 

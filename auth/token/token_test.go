@@ -1,4 +1,4 @@
-package main
+package token
 
 import (
 	"testing"
@@ -11,7 +11,7 @@ func TestNewToken(t *testing.T) {
 		Email: "user@example.com",
 	}
 
-	_, err := newToken(profileInfo)
+	_, err := NewToken(profileInfo)
 	if err != nil {
 		t.Errorf("Failed to generate JWT: %s", err)
 	}

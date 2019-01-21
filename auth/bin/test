@@ -1,4 +1,7 @@
 #!/bin/bash
 
 export PORT=9999999
+export ROOT_DOMAIN=http://localhost:3000
+export GOOGLE_CREDS_PATH=$HOME/code/home/home/auth/creds.json
+export JWT_KEY_PATH=$HOME/code/home/home/auth/key.pem
 go test -v

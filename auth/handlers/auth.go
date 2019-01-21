@@ -1,28 +1,21 @@
-package main
+package handlers
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	"github.com/mcasper/home/auth/token"
 	"golang.org/x/oauth2"
 
-	"crypto/ecdsa"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
-type ProfileInfo struct {
-	Sub   string `json:"sub"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+type AuthHandler struct {
+	Conf *oauth2.Config
 }
 
-type authHandler struct{}
-
-func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	retrievedStateCookie, stateErr := r.Cookie("state")
 	if stateErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -37,6 +30,8 @@ func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	retrievedReturnToCookie, returnToErr := r.Cookie("returnTo")
 	if returnToErr != nil {
+		fmt.Println("heyheyhey")
+		fmt.Println(returnToErr)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("<html>Invalid returnTo</html>"))
 		return
@@ -47,14 +42,14 @@ func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tok, err := conf.Exchange(oauth2.NoContext, r.FormValue("code"))
+	tok, err := h.Conf.Exchange(oauth2.NoContext, r.FormValue("code"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(fmt.Sprintf("<html>Error: %v</html>", err)))
 		return
 	}
 
-	client := conf.Client(oauth2.NoContext, tok)
+	client := h.Conf.Client(oauth2.NoContext, tok)
 	profileHandle, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -63,9 +58,9 @@ func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	defer profileHandle.Body.Close()
 	profileInfoJson, _ := ioutil.ReadAll(profileHandle.Body)
-	var profileInfo ProfileInfo
+	var profileInfo token.ProfileInfo
 	json.Unmarshal(profileInfoJson, &profileInfo)
-	jwt, jwtErr := newToken(profileInfo)
+	jwt, jwtErr := token.NewToken(profileInfo)
 	if jwtErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(fmt.Sprintf("<html>Error: %v</html>", jwtErr)))
@@ -85,30 +80,4 @@ func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &sessionCookie)
 
 	http.Redirect(w, r, redirectTo, 302)
-}
-
-func newToken(profileInfo ProfileInfo) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
-		"name": profileInfo.Name,
-	})
-
-	key := ecdsaPrivateKey()
-	return token.SignedString(key)
-}
-
-func ecdsaPrivateKey() *ecdsa.PrivateKey {
-	jwt_key_path := os.Getenv("JWT_KEY_PATH")
-	if jwt_key_path == "" {
-		log.Fatal("JWT_KEY_PATH is not set")
-	}
-
-	data, err := ioutil.ReadFile(jwt_key_path)
-	if err != nil {
-		log.Fatal("Error reading private key file: ", err)
-	}
-	ecdsaKey, ecdsaKeyErr := jwt.ParseECPrivateKeyFromPEM(data)
-	if ecdsaKeyErr != nil {
-		log.Fatal("Error parsing private key: ", ecdsaKeyErr)
-	}
-	return ecdsaKey
 }

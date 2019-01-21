@@ -1,7 +1,8 @@
-package main
+package handlers
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"github.com/mcasper/home/auth/token"
 
 	"encoding/json"
 	"fmt"
@@ -15,9 +16,9 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-type meHandler struct{}
+type MeHandler struct{}
 
-func (h *meHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *MeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	authorizationHeaders := r.Header["Authorization"]
 
 	if len(authorizationHeaders) != 1 {
@@ -33,16 +34,16 @@ func (h *meHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jwtString := strings.TrimPrefix(authorizationHeader, "Bearer ")
-	token, jwtDecodeErr := jwt.ParseWithClaims(string(jwtString), &Claims{}, func(token *jwt.Token) (interface{}, error) {
+	decodedToken, jwtDecodeErr := jwt.ParseWithClaims(string(jwtString), &Claims{}, func(jwtToken *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		if _, ok := jwtToken.Method.(*jwt.SigningMethodECDSA); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
 		}
 
-		return ecdsaPrivateKey().Public(), nil
+		return token.EcdsaPrivateKey().Public(), nil
 	})
 
-	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+	if claims, ok := decodedToken.Claims.(*Claims); ok && decodedToken.Valid {
 		json.NewEncoder(w).Encode(claims)
 	} else {
 		log.Println("Error decoding JWT:", jwtDecodeErr)
