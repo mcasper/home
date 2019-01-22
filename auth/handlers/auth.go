@@ -72,7 +72,7 @@ func (h *AuthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(fmt.Sprintf("<html>Error: %v</html>", jwtErr)))
 		return
 	}
-	redirectTo := retrievedReturnToCookie.Value + "?key=" + jwt
+	redirectTo := retrievedReturnToCookie.Value
 
 	cookieExpiration := time.Now().Add(24 * time.Hour)
 	sessionCookie := http.Cookie{

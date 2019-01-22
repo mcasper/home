@@ -19,7 +19,11 @@ class ApplicationController < ActionController::Base
   end
 
   def decode_jwt
-    JWT.decode(params[:key], ecdsa_key, true, algorithm: "ES256")
+    JWT.decode(home_session, ecdsa_key, true, algorithm: "ES256")
+  end
+
+  def home_session
+    cookies["home_session"]
   end
 
   def ecdsa_key
