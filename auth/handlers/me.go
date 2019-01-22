@@ -35,7 +35,6 @@ func (h *MeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	jwtString := strings.TrimPrefix(authorizationHeader, "Bearer ")
 	decodedToken, jwtDecodeErr := jwt.ParseWithClaims(string(jwtString), &Claims{}, func(jwtToken *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
 		if _, ok := jwtToken.Method.(*jwt.SigningMethodECDSA); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
 		}
@@ -46,7 +45,7 @@ func (h *MeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if claims, ok := decodedToken.Claims.(*Claims); ok && decodedToken.Valid {
 		json.NewEncoder(w).Encode(claims)
 	} else {
-		log.Println("Error decoding JWT:", jwtDecodeErr)
+		log.Println("Error validating JWT:", jwtDecodeErr)
 		w.WriteHeader(http.StatusUnauthorized)
 	}
 }

@@ -2,9 +2,9 @@ class ApplicationController < ActionController::Base
   before_action :ensure_valid_token
 
   def ensure_valid_token
-    return true if signed_in?
-
     begin
+      return true if signed_in?
+
       token = decode_jwt
       session[:user_name] = token.first.fetch("name")
     rescue JWT::DecodeError
@@ -14,12 +14,16 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def token_valid?
+    !Jwt.new(claims: decode_jwt).expired?
+  end
+
   def signed_in?
     session[:user_name].present?
   end
 
   def decode_jwt
-    JWT.decode(home_session, ecdsa_key, true, algorithm: "ES256")
+    @decode_jwt ||= JWT.decode(home_session, ecdsa_key, true, algorithm: "ES256")
   end
 
   def home_session

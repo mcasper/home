@@ -7,7 +7,13 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 )
+
+type Claims struct {
+	Name string `json:"name"`
+	jwt.StandardClaims
+}
 
 type ProfileInfo struct {
 	Sub   string `json:"sub"`
@@ -16,9 +22,15 @@ type ProfileInfo struct {
 }
 
 func NewToken(profileInfo ProfileInfo) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
-		"name": profileInfo.Name,
-	})
+	claims := Claims{
+		profileInfo.Name,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Unix() + (60 * 60 * 24 * 7),
+			Issuer:    "Auth",
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodES256, &claims)
 
 	key := EcdsaPrivateKey()
 	return token.SignedString(key)
