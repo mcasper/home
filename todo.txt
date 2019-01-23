@@ -1,4 +1,3 @@
-[all] - add sign out page
 [recipes] - empty list page
 [cluster] - implicit auth between apps
 [recipes] - add categories to recipes

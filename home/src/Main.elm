@@ -214,7 +214,7 @@ viewBody model =
 viewNav =
     nav [ class "navbar navbar-dark bg-dark", style "height" "70px", style "color" "white" ]
         [ text "Home"
-        , a [ href "#", style "text-decoration" "none", style "color" "white" ] [ text "Edit" ]
+        , a [ href "/auth/signout", style "text-decoration" "none", style "color" "white" ] [ text "Sign Out" ]
         ]
 
 

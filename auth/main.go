@@ -65,6 +65,7 @@ func main() {
 	http.Handle("/auth/consume", &handlers.AuthHandler{Conf: conf})
 	http.Handle("/auth/me", &handlers.MeHandler{})
 	http.Handle("/auth/unauthorized", &handlers.UnauthorizedHandler{Conf: conf})
+	http.Handle("/auth/signout", &handlers.SignoutHandler{})
 	log.Fatal(http.ListenAndServe(":"+port, logRequest(http.DefaultServeMux)))
 }
 

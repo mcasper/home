@@ -332,6 +332,8 @@ viewNav =
             [ a [ href "/matches/new", style "text-decoration" "none", style "color" "white" ]
                 [ text "New"
                 ]
+            , text "\n|\n"
+            , a [ href "/auth/signout", style "text-decoration" "none", style "color" "white" ] [ text "Sign Out" ]
             ]
         ]
 
