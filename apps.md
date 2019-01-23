@@ -40,3 +40,11 @@
 ## Router
 * Name: Router, Tech: Envoy
 * Responsible for doing path-based service routing, to keep everything under one domain
+
+## Dailies
+* Name: Dailies, Tech: TBD
+* Daily task list, can persist or drop tasks between days
+
+## Queue
+* Name: Queue, Tech: Kafka
+* Responsible for passing messages and events between services
