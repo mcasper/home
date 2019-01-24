@@ -1,4 +1,5 @@
 #!/bin/bash
 
-export CI=true
-yarn test
+set -eou pipefail
+
+mix test

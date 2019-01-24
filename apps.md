@@ -5,7 +5,7 @@
 * User model called 'Ghost'
 
 ## Budget app
-* Name: Budget, Frontend: React, Backend: Go/stdlib http
+* Name: Budget, Frontend: Phoenix, Backend: Phoenix
 * Set budget
 * Refill to budget line every month
 * Categories
@@ -17,10 +17,6 @@
 * Name: Scoreboard, Frontend: Elm, Backend: Rust/actix-web
 * Keep long term score for games (sequence)
 * Form teams, run championships, statistics
-
-## Team former
-* Name: Teams, Frontend: Scala/play, Backend: Scala/play
-* Take in list of family members, generate random teams
 
 ## Movie directory
 * Name: Movies, Frontend: Go/revel, Backend: Go/revel
@@ -42,7 +38,7 @@
 * Responsible for doing path-based service routing, to keep everything under one domain
 
 ## Dailies
-* Name: Dailies, Tech: TBD
+* Name: Dailies, Frontend: React, Backend: TBD
 * Daily task list, can persist or drop tasks between days
 
 ## Queue

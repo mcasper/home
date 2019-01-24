@@ -2,7 +2,6 @@
 
 set -eou pipefail
 
-export BROWSER=none
 export PORT=3001
 
-exec yarn start
+exec iex -S mix phx.server
