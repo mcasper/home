@@ -15,12 +15,5 @@ defmodule BudgetWeb.Router do
 
   scope "/", BudgetWeb do
     pipe_through :browser
-
-    get "/", PageController, :index
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", BudgetWeb do
-  #   pipe_through :api
-  # end
 end
