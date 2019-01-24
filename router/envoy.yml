@@ -37,6 +37,11 @@ static_resources:
                   cluster: recipes
 
               - match:
+                  prefix: /budget
+                route:
+                  cluster: budget
+
+              - match:
                   prefix: /
                 route:
                   cluster: home
@@ -93,6 +98,23 @@ static_resources:
     hosts:
     - socket_address:
         address: recipes
+        port_value: 80
+
+  - name: budget
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: budget
         port_value: 80
 
   - name: home
