@@ -4,4 +4,4 @@ set -eou pipefail
 
 export PORT=3001
 
-exec iex -S mix phx.server
+exec mix phx.server

@@ -79,7 +79,7 @@ static_resources:
         address: docker.for.mac.localhost
         port_value: 3007
 
-  - name: recipes
+  - name: budget
     connect_timeout: 2.5s
     type: strict_dns
     lb_policy: round_robin
