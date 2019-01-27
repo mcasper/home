@@ -3,5 +3,6 @@
 set -eou pipefail
 
 export PORT=3001
+export JWT_PUBLIC_KEY_PATH=../auth/key.pem
 
 exec mix phx.server
