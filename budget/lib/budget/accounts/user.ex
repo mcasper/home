@@ -5,6 +5,8 @@ defmodule Budget.Accounts.User do
   schema "users" do
     field :email, :string
 
+    has_one(:item, Budget.Plaid.Item)
+
     timestamps()
   end
 

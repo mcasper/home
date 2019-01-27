@@ -13,7 +13,8 @@ defmodule BudgetWeb.Router do
   scope "/budget", BudgetWeb do
     pipe_through :browser
 
-    get("/", BudgetController, :show)
-    post("/plaid/exchange", PlaidExchangeController, :create)
+    get("/", AccountController, :index)
+    get("/plaid/items/new", PlaidItemController, :new)
+    post("/plaid/items", PlaidItemController, :create)
   end
 end

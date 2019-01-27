@@ -1,4 +1,4 @@
-defmodule Budget.Plaid do
+defmodule Budget.Plaid.Client do
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, "https://sandbox.plaid.com"

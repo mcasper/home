@@ -22,6 +22,7 @@ defmodule Budget.Accounts do
       nil ->
         {:ok, user} = create_user(%{email: email})
         user
+
       user ->
         user
     end

@@ -29,6 +29,7 @@ config :budget,
   plaid_secret: System.get_env("PLAID_SECRET")
 
 import_config "#{Mix.env()}.exs"
+
 if File.exists?("config/#{Mix.env()}.secret.exs") do
   import_config "#{Mix.env()}.secret.exs"
 end

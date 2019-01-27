@@ -1,6 +1,6 @@
 <h1>Budget</h1>
 
-<button id="link-button">Link Account</button>
+<button class="btn btn-primary" id="link-button">Link Account</button>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 <script type="text/javascript">
@@ -21,9 +21,13 @@
         // The metadata object contains info about the institution the
         // user selected and the account ID or IDs, if the
         // Select Account view is enabled.
-        $.post('/budget/plaid/exchange', {
+        $.post('/budget/plaid/items', {
           public_token: public_token,
           _csrf_token: '<%= @csrf_token %>',
+        }).done(function() {
+          window.location.replace('/budget');
+        }).fail(function() {
+          alert('Recording item failed');
         });
       },
       onExit: function(err, metadata) {

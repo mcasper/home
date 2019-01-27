@@ -24,8 +24,14 @@
     </nav>
 
     <main role="main" class="container">
-      <%# <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %1></p> %>
-      <%# <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %1></p> %>
+      <%= if get_flash(@conn, :error) do %>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <% end %>
+
+      <%= if get_flash(@conn, :info) do %>
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <% end %>
+
       <%= render @view_module, @view_template, assigns %>
     </main>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/budget/js/app.js") %>"></script>
