@@ -5,8 +5,8 @@ defmodule BudgetWeb.AuthPlug do
 
   def call(conn, _opts) do
     case decode_jwt(conn) do
-      {:ok, _} ->
-        conn
+      {:ok, claims} ->
+        assign(conn, :user_id, get_user_id_from_claims(claims))
 
       {:error, err} ->
         IO.inspect(err)
@@ -17,6 +17,10 @@ defmodule BudgetWeb.AuthPlug do
         )
         |> halt()
     end
+  end
+
+  defp get_user_id_from_claims(%{"email" => email}) do
+    Budget.Accounts.find_or_create_user(email).id
   end
 
   defp decode_jwt(conn) do

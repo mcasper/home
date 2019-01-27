@@ -11,7 +11,8 @@ import (
 )
 
 type Claims struct {
-	Name string `json:"name"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 	jwt.StandardClaims
 }
 
@@ -24,6 +25,7 @@ type ProfileInfo struct {
 func NewToken(profileInfo ProfileInfo) (string, error) {
 	claims := Claims{
 		profileInfo.Name,
+		profileInfo.Email,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Unix() + (60 * 60 * 24 * 7),
 			Issuer:    "Auth",
