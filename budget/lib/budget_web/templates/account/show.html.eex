@@ -1,0 +1,12 @@
+<%= link("Back to Accounts", to: Routes.account_path(@conn, :index)) %>
+<h1 class="mt-4">Account</h1>
+
+<ul class="list-group mt-3">
+  <%= for transaction <- @transactions do %>
+    <li class="list-group-item">
+      <p><%= transaction["name"] %></p>
+      <p>$<%= transaction["amount"] %></p>
+      <p><%= transaction["date"] %></p>
+    </li>
+  <% end %>
+</ul>

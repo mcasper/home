@@ -11,15 +11,15 @@
   <body>
     <nav class="navbar navbar-dark bg-dark" style="height: 70px; color: white;">
       <div>
-        <%# <%= link_to("Recipes", recipes_path, style: "text-decoration: none; color: white;") %1> %>
-        <%# | %>
-        <%# <%= link_to("Back to Home", "#{ROOT_DOMAIN}/", style: "text-decoration: none; color: white;") %1> %>
+        <%= link("Budget", to: Routes.account_path(@conn, :index), style: "text-decoration: none; color: white;") %>
+        |
+        <%= link("Back to Home", to: "/", style: "text-decoration: none; color: white;") %>
       </div>
 
       <div>
         <%# <%= link_to("New", new_recipe_path, style: "text-decoration: none; color: white;") %1> %>
         <%# | %>
-        <%# <%= link_to("Sign Out", "#{ROOT_DOMAIN}/auth/signout", style: "text-decoration: none; color: white;") %1> %>
+        <%= link("Sign Out", to: "/auth/signout", style: "text-decoration: none; color: white;") %>
       </div>
     </nav>
 

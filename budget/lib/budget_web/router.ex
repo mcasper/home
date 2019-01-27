@@ -14,6 +14,8 @@ defmodule BudgetWeb.Router do
     pipe_through :browser
 
     get("/", AccountController, :index)
+    get("/accounts", AccountController, :index)
+    get("/accounts/:id", AccountController, :show)
     get("/plaid/items/new", PlaidItemController, :new)
     post("/plaid/items", PlaidItemController, :create)
   end

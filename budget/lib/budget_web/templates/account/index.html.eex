@@ -1,1 +1,12 @@
-<h1>Accounts</h1>
+<h1 class="mt-4">Accounts</h1>
+
+<ul class="list-group mt-3">
+  <%= for account <- @balances do %>
+    <%= link(to: Routes.account_path(@conn, :show, account["account_id"]), style: "text-decoration: none; color: black;") do %>
+      <li class="list-group-item">
+        <p><%= account["name"] %></p>
+        <p><%= account["type"] %></p>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
