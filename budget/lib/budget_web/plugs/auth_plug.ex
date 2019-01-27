@@ -7,22 +7,32 @@ defmodule BudgetWeb.AuthPlug do
     case decode_jwt(conn) do
       {:ok, _} ->
         conn
+
       {:error, err} ->
         IO.inspect(err)
+
         conn
-        |> Phoenix.Controller.redirect(external: "http://localhost:3000/auth/login?returnTo=http://localhost:3000/budget")
+        |> Phoenix.Controller.redirect(
+          external: "http://localhost:3000/auth/login?returnTo=http://localhost:3000/budget"
+        )
         |> halt()
     end
   end
 
   defp decode_jwt(conn) do
     case raw_token(conn) do
-      nil -> 
+      nil ->
         {:error, "No session"}
-      "" -> 
+
+      "" ->
         {:error, "No session"}
+
       token ->
-        signer = Joken.Signer.create("ES256", %{"pem" => File.read!(System.get_env("JWT_PUBLIC_KEY_PATH"))})
+        signer =
+          Joken.Signer.create("ES256", %{
+            "pem" => File.read!(System.get_env("JWT_PUBLIC_KEY_PATH"))
+          })
+
         Budget.Jwt.verify_and_validate(token, signer)
     end
   end

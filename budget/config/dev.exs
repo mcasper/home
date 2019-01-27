@@ -73,3 +73,6 @@ config :budget, Budget.Repo,
   database: "budget_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :budget,
+  plaid_url: "https://sandbox.plaid.com"

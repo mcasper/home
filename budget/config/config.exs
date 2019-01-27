@@ -25,6 +25,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
+config :budget,
+  plaid_secret: System.get_env("PLAID_SECRET")
+
 import_config "#{Mix.env()}.exs"
+if File.exists?("config/#{Mix.env()}.secret.exs") do
+  import_config "#{Mix.env()}.secret.exs"
+end

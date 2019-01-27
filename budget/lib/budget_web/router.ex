@@ -10,9 +10,10 @@ defmodule BudgetWeb.Router do
     plug(BudgetWeb.AuthPlug)
   end
 
-  scope "/", BudgetWeb do
+  scope "/budget", BudgetWeb do
     pipe_through :browser
 
-    get("/budget", BudgetController, :show)
+    get("/", BudgetController, :show)
+    post("/plaid/exchange", PlaidExchangeController, :create)
   end
 end
