@@ -8,10 +8,13 @@ defmodule BudgetWeb.PlaidItemController do
   def create(conn, %{"public_token" => public_token}) do
     case Budget.Plaid.Client.exchange_token(public_token) do
       {:ok, %{"access_token" => access_token, "item_id" => item_id}} ->
+        current_user = current_user(conn)
+        Budget.Plaid.delete_existing_items_for_user(current_user)
+
         {:ok, _} =
           Budget.Plaid.create_item(%{
             "access_token" => access_token,
-            "user_id" => current_user(conn).id,
+            "user_id" => current_user.id,
             "origin_id" => item_id
           })
 

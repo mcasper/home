@@ -15,6 +15,9 @@ defmodule Budget.Plaid.Client do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
+      {:ok, %Tesla.Env{body: response_body}} ->
+        {:error, response_body}
+
       {:error, %Tesla.Env{status: status, body: _response_body}} ->
         {:error, status}
     end
@@ -39,6 +42,9 @@ defmodule Budget.Plaid.Client do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
+      {:ok, %Tesla.Env{body: response_body}} ->
+        {:error, response_body}
+
       {:error, %Tesla.Env{status: status, body: _response_body}} ->
         {:error, status}
     end
@@ -54,6 +60,9 @@ defmodule Budget.Plaid.Client do
     case post("/accounts/balance/get", request_body) do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
+
+      {:ok, %Tesla.Env{body: response_body}} ->
+        {:error, response_body}
 
       {:error, %Tesla.Env{status: status, body: _response_body}} ->
         {:error, status}

@@ -9,8 +9,19 @@ defmodule BudgetWeb.AccountController do
         redirect(conn, to: Routes.plaid_item_path(conn, :new))
 
       item ->
-        {:ok, %{"accounts" => balances}} = Budget.Plaid.Client.get_balances(item.access_token)
-        render(conn, :index, balances: balances)
+        case Budget.Plaid.Client.get_balances(item.access_token) do
+          {:ok, %{"accounts" => balances}} ->
+            render(conn, :index, balances: balances)
+
+          {:error, %{"error_code" => error}} ->
+            case error do
+              "ITEM_LOGIN_REQUIRED" ->
+                redirect(conn, to: Routes.plaid_item_path(conn, :new))
+
+              _ ->
+                throw("Don't know what to do with #{error}")
+            end
+        end
     end
   end
 

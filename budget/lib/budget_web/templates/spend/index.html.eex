@@ -1,0 +1,42 @@
+<div class="container-fluid text-center">
+  <h1 class="mt-4">Spend Overview</h1>
+</div>
+
+<div class="container-fluid text-center">
+  <h2>Total Balance: <%= @total_balance %></h2>
+  <h2>Net last 30 days: <%= net(@total_income, @total_spend) %></h2>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col text-center">
+      <h2>Income</h2>
+      Income last 30 days: <%= @total_income %>
+
+      <ul class="list-group mt-3">
+        <%= for transaction <- @income_transactions do %>
+          <li class="list-group-item">
+            <p><%= transaction["name"] %></p>
+            <p>$<%= abs(transaction["amount"]) %></p>
+            <p><%= transaction["date"] %></p>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="col text-center">
+      <h2>Spend</h2>
+      Spend last 30 days: <%= @total_spend %>
+
+      <ul class="list-group mt-3">
+        <%= for transaction <- @spend_transactions do %>
+          <li class="list-group-item">
+            <p><%= transaction["name"] %></p>
+            <p>$<%= transaction["amount"] %></p>
+            <p><%= transaction["date"] %></p>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

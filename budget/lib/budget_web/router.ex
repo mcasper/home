@@ -18,5 +18,8 @@ defmodule BudgetWeb.Router do
     get("/accounts/:id", AccountController, :show)
     get("/plaid/items/new", PlaidItemController, :new)
     post("/plaid/items", PlaidItemController, :create)
+
+    get("/spend", SpendController, :index)
+    resources("/goals", GoalController, only: [:new, :create, :show])
   end
 end

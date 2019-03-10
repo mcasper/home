@@ -101,4 +101,8 @@ defmodule Budget.Plaid do
   def change_item(%Item{} = item) do
     Item.changeset(item, %{})
   end
+
+  def delete_existing_items_for_user(%Budget.Accounts.User{} = user) do
+    Repo.delete_all(from(i in Item, where: i.user_id == ^user.id))
+  end
 end
