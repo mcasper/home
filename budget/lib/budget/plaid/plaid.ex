@@ -105,4 +105,12 @@ defmodule Budget.Plaid do
   def delete_existing_items_for_user(%Budget.Accounts.User{} = user) do
     Repo.delete_all(from(i in Item, where: i.user_id == ^user.id))
   end
+
+  alias Budget.Plaid.IgnoredTransaction
+
+  def create_ignored_transaction(attrs \\ %{}) do
+    %IgnoredTransaction{}
+    |> IgnoredTransaction.changeset(attrs)
+    |> Repo.insert()
+  end
 end

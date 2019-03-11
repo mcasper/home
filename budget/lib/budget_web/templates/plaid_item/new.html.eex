@@ -1,5 +1,6 @@
 <div class="container-fluid text-center">
-  <h1>Budget</h1>
+  <h1 class="mt-4">Budget</h1>
+  <p>To get started, link your bank account</p>
 
   <button class="btn btn-primary" id="link-button">Link Account</button>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>

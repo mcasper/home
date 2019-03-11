@@ -1,14 +1,14 @@
 defmodule BudgetWeb.GoalView do
   use BudgetWeb, :view
 
-  def net(income, spend) do
+  def format_net(income, spend) do
     abs_income = abs(income)
     abs_spend = abs(spend)
 
     if abs_income > abs_spend do
-      "+#{abs_income - abs_spend}"
+      "+#{format_float(abs_income - abs_spend)}"
     else
-      "-#{abs_spend - abs_income}"
+      "-#{format_float(abs_spend - abs_income)}"
     end
   end
 
@@ -17,9 +17,21 @@ defmodule BudgetWeb.GoalView do
       "Never"
     else
       daily_net = (abs(income_last_30) - abs(spend_last_30)) / 30
-      difference = current_balance - (goal_in_cents / 100)
-      days = difference / daily_net
+      goal_in_dollars = goal_in_cents / 100
+      difference = goal_in_dollars - current_balance
+      days = trunc(Float.ceil(difference / daily_net))
       "#{days} Days"
     end
+  end
+
+  def format_cents(cents) do
+    cents
+    |> Money.new()
+    |> Money.to_string()
+  end
+
+  def format_float(float) do
+    cents = trunc(float * 100)
+    format_cents(cents)
   end
 end

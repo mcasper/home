@@ -1,15 +1,19 @@
 defmodule BudgetWeb.SpendController do
   use BudgetWeb, :controller
 
+  plug BudgetWeb.HasItemPlug
+  plug BudgetWeb.HasGoalPlug
+
   def index(conn, _params) do
-    current_user = current_user(conn) |> Budget.Repo.preload(:item)
+    current_user = current_user(conn)
+                   |> Budget.Repo.preload([:item, :ignored_transactions])
 
     case current_user.item do
       nil ->
         redirect(conn, to: Routes.plaid_item_path(conn, :new))
 
       item ->
-        case Budget.Plaid.Spend.calculate(item.access_token) do
+        case Budget.Plaid.Spend.calculate(item.access_token, current_user.ignored_transactions) do
           {:ok,
            %{
              total_balance: total_balance,

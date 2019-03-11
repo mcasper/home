@@ -6,6 +6,9 @@ defmodule Budget.Accounts.User do
     field :email, :string
 
     has_one(:item, Budget.Plaid.Item)
+    has_one(:goal, Budget.Budget.Goal)
+
+    has_many(:ignored_transactions, Budget.Plaid.IgnoredTransaction)
 
     timestamps()
   end

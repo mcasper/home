@@ -3,10 +3,38 @@
 </div>
 
 <div class="container-fluid text-center">
-  <h2>Goal: <%= @goal.amount_in_cents %></h2>
-  <h2>Total Balance: <%= @total_balance %></h2>
-  <h2>Net last 30 days: <%= net(@total_income, @total_spend) %></h2>
-  <h2>Income last 30 days: <%= @total_income %></h2>
-  <h2>Spend last 30 days: <%= @total_spend %></h2>
-  <h2>Estimated date of achieving goal: <%= estimate_goal_completion(@goal.amount_in_cents, @total_balance, @total_income, @total_spend) %></h2>
+  <div class="row mt-2">
+    <div class="col">Goal:</div>
+    <div class="col font-weight-bolder"><%= format_cents(@goal.amount_in_cents) %></div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">Total Balance:</div>
+    <div class="col font-weight-bolder"><%= format_float(@total_balance) %></div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">Net last 30 days:</div>
+    <div class="col font-weight-bolder"><%= format_net(@total_income, @total_spend) %></div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">Income last 30 days:</div>
+    <div class="col font-weight-bolder"><%= format_float(@total_income) %></div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">Spend last 30 days:</div>
+    <div class="col font-weight-bolder"><%= format_float(@total_spend) %></div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">Estimated date of achieving goal:</div>
+    <div class="col font-weight-bolder"><%= estimate_goal_completion(@goal.amount_in_cents, @total_balance, @total_income, @total_spend) %></div>
+  </div>
+</div>
+
+<div class="container-fluid text-center">
+  <%= link("View Spend", to: Routes.spend_path(@conn, :index), class: "btn btn-primary") %>
+  <%= link("Edit Goal", to: Routes.goal_path(@conn, :edit), class: "btn btn-primary") %>
 </div>

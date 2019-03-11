@@ -9,6 +9,6 @@ defmodule Budget.Repo.Migrations.CreateGoals do
       timestamps()
     end
 
-    create(index(:goals, :user_id))
+    create_if_not_exists(index(:goals, :user_id))
   end
 end

@@ -37,6 +37,7 @@ defmodule Budget.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.1"},
       {:joken, "~> 2.0"},
+      {:money, "~> 1.4"},
       {:phoenix, "~> 1.4"},
       {:phoenix_ecto, "~> 4.0"},
       {:phoenix_html, "~> 2.11"},

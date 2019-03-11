@@ -13,13 +13,20 @@ defmodule BudgetWeb.Router do
   scope "/budget", BudgetWeb do
     pipe_through :browser
 
-    get("/", AccountController, :index)
+    get("/", GoalController, :show)
+
     get("/accounts", AccountController, :index)
     get("/accounts/:id", AccountController, :show)
     get("/plaid/items/new", PlaidItemController, :new)
     post("/plaid/items", PlaidItemController, :create)
 
     get("/spend", SpendController, :index)
-    resources("/goals", GoalController, only: [:new, :create, :show])
+
+    get("/goal", GoalController, :show)
+    get("/goal/edit", GoalController, :edit)
+    put("/goal", GoalController, :update)
+    resources("/goals", GoalController, only: [:new, :create])
+
+    resources("/ignored_transactions", PlaidIgnoredTransactionController, only: [:create])
   end
 end

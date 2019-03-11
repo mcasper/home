@@ -28,6 +28,9 @@ config :phoenix, :json_library, Jason
 config :budget,
   plaid_secret: System.get_env("PLAID_SECRET")
 
+config :money,
+  default_currency: :USD
+
 import_config "#{Mix.env()}.exs"
 
 if File.exists?("config/#{Mix.env()}.secret.exs") do

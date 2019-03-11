@@ -1,7 +1,7 @@
 defmodule Budget.Plaid.Spend do
-  def calculate(access_token) do
+  def calculate(access_token, ignored_transactions) do
     with {:ok, %{"accounts" => balances}} = get_balances(access_token),
-         {:ok, transactions} = get_all_transactions(balances, access_token),
+         {:ok, transactions} = get_all_transactions(balances, access_token, ignored_transactions),
          {:ok, total_balance} = extract_total_balance(balances),
          {:ok, spend_transactions} = extract_spend(transactions),
          {:ok, total_spend} = extract_total_spend(spend_transactions),
@@ -22,13 +22,17 @@ defmodule Budget.Plaid.Spend do
     Budget.Plaid.Client.get_balances(access_token)
   end
 
-  defp get_all_transactions(balances, access_token) do
+  defp get_all_transactions(balances, access_token, ignored_transactions) do
+    ignored_transaction_ids = Enum.map(ignored_transactions, &(&1.origin_id))
     txs =
       Enum.flat_map(balances, fn balance ->
         {:ok, %{"transactions" => transactions}} =
           Budget.Plaid.Client.get_transactions(access_token, balance["account_id"])
 
         transactions
+      end)
+      |> Enum.filter(fn transaction ->
+        !Enum.member?(ignored_transaction_ids, transaction["transaction_id"])
       end)
 
     {:ok, txs}

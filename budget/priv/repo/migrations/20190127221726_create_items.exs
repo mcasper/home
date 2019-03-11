@@ -10,7 +10,7 @@ defmodule Budget.Repo.Migrations.CreateItems do
       timestamps()
     end
 
-    create(index(:items, :user_id))
-    create(index(:items, :origin_id))
+    create_if_not_exists(index(:items, :user_id))
+    create_if_not_exists(index(:items, :origin_id))
   end
 end

@@ -1,0 +1,14 @@
+<div class="container-fluid text-center">
+  <h1 class="mt-4">Edit your savings goal</h1>
+</div>
+
+<div class="container">
+  <%= form_for @changeset, Routes.goal_path(@conn, :update), fn f -> %>
+    <div class="form-group">
+      <%= label(f, :amount_in_cents, "Amount (in cents)", for: "goal_amount_in_cents") %>
+      <%= number_input(f, :amount_in_cents, class: "form-control", id: "goal_amount_in_cents") %>
+    </div>
+
+    <%= submit("Submit", class: "btn btn-primary") %>
+  <% end %>
+</div>
