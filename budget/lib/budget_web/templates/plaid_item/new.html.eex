@@ -9,7 +9,7 @@
     (function($) {
       var handler = Plaid.create({
         clientName: 'Plaid Quickstart',
-        env: 'sandbox',
+        env: '<%= plaid_env() %>',
         // Replace with your public_key from the Dashboard
         key: 'e911a93b41327bfb1d4493525167b2',
         product: ['transactions'],
