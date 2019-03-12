@@ -27,7 +27,8 @@ config :budget, Budget.Repo,
 
 config :budget,
   plaid_url: "https://development.plaid.com",
-  plaid_secret: System.get_env("BUDGET_PLAID_SECRET")
+  plaid_secret: System.get_env("BUDGET_PLAID_SECRET"),
+  root_domain: "https://casper.coffee"
 
 # ## SSL Support
 #

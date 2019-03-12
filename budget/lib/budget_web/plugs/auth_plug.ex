@@ -13,7 +13,7 @@ defmodule BudgetWeb.AuthPlug do
 
         conn
         |> Phoenix.Controller.redirect(
-          external: "http://localhost:3000/auth/login?returnTo=http://localhost:3000/budget"
+          external: "#{root_domain()}/auth/login?returnTo=#{root_domain()}/budget"
         )
         |> halt()
     end
@@ -43,5 +43,9 @@ defmodule BudgetWeb.AuthPlug do
 
   defp raw_token(conn) do
     conn.req_cookies["home_session"]
+  end
+
+  defp root_domain do
+    Application.get_env(:budget, :root_domain)
   end
 end

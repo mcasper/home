@@ -38,12 +38,12 @@ routeParser =
 ---- JWT ----
 
 
-getMe : String -> Cmd Msg
-getMe token =
+getMe : String -> String -> Cmd Msg
+getMe token webRoot =
     Http.send GotMe <|
         Http.request
             { method = "GET"
-            , url = "http://localhost:3000/auth/me"
+            , url = webRoot ++ "/auth/me"
             , expect = Http.expectJson userDecoder
             , headers = [ Http.header "Authorization" ("Bearer " ++ token) ]
             , body = Http.emptyBody
@@ -185,6 +185,17 @@ matchesSeed =
       }
     ]
 
+webRootFromConfig : Config -> String
+webRootFromConfig config =
+    case config.node_env of
+        "development" ->
+            "http://localhost:3000"
+
+        "production" ->
+            "https://casper.coffee"
+
+        _ ->
+            "http://localhost:3000"
 
 
 ---- MODEL ----
@@ -195,7 +206,8 @@ type alias User =
 
 
 type alias Config =
-    { session : String }
+    { node_env : String
+    , session : String }
 
 
 type alias Model =
@@ -218,10 +230,10 @@ init config url key =
       , isAuthed = False
       }
     , if config.session == "" then
-        redirectToAuth
+        redirectToAuth config
 
       else
-        getMe config.session
+        getMe config.session (webRootFromConfig config)
     )
 
 
@@ -262,12 +274,12 @@ update msg model =
             ( { model | isAuthed = True }, Cmd.none )
 
         GotMe (Err error) ->
-            ( model, redirectToAuth )
+            ( model, redirectToAuth model.config )
 
 
-redirectToAuth : Cmd Msg
-redirectToAuth =
-    Nav.load "http://localhost:3000/auth/login?returnTo=http://localhost:3000/scoreboard"
+redirectToAuth : Config -> Cmd Msg
+redirectToAuth config =
+    Nav.load ((webRootFromConfig config) ++ "/auth/login?returnTo=" ++ (webRootFromConfig config) ++ "/scoreboard")
 
 
 

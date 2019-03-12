@@ -75,4 +75,5 @@ config :budget, Budget.Repo,
   pool_size: 10
 
 config :budget,
-  plaid_url: "https://sandbox.plaid.com"
+  plaid_url: "https://sandbox.plaid.com",
+  root_domain: "http://localhost:3001"

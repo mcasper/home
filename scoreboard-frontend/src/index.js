@@ -20,6 +20,7 @@ function getCookie(cname) {
 Elm.Main.init({
   node: document.getElementById('root'),
   flags: {
+    node_env: process.env.NODE_ENV,
     session: getCookie("home_session"),
   }
 });
