@@ -10,7 +10,7 @@ defmodule Budget.Plaid.Client do
       "public_token" => public_token
     }
 
-    case post(base_url() + "/item/public_token/exchange", request_body) do
+    case post(base_url() <> "/item/public_token/exchange", request_body) do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
@@ -37,7 +37,7 @@ defmodule Budget.Plaid.Client do
       }
     }
 
-    case post(base_url() + "/transactions/get", request_body) do
+    case post(base_url() <> "/transactions/get", request_body) do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
@@ -56,7 +56,7 @@ defmodule Budget.Plaid.Client do
       "access_token" => access_token
     }
 
-    case post(base_url() + "/accounts/balance/get", request_body) do
+    case post(base_url() <> "/accounts/balance/get", request_body) do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
