@@ -1,7 +1,6 @@
 defmodule Budget.Plaid.Client do
   use Tesla
 
-  plug Tesla.Middleware.BaseUrl, "https://sandbox.plaid.com"
   plug Tesla.Middleware.JSON
 
   def exchange_token(public_token) do
@@ -11,7 +10,7 @@ defmodule Budget.Plaid.Client do
       "public_token" => public_token
     }
 
-    case post("/item/public_token/exchange", request_body) do
+    case post(base_url() + "/item/public_token/exchange", request_body) do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
@@ -38,7 +37,7 @@ defmodule Budget.Plaid.Client do
       }
     }
 
-    case post("/transactions/get", request_body) do
+    case post(base_url() + "/transactions/get", request_body) do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
@@ -57,7 +56,7 @@ defmodule Budget.Plaid.Client do
       "access_token" => access_token
     }
 
-    case post("/accounts/balance/get", request_body) do
+    case post(base_url() + "/accounts/balance/get", request_body) do
       {:ok, %Tesla.Env{status: 200, body: response_body}} ->
         {:ok, response_body}
 
@@ -72,5 +71,9 @@ defmodule Budget.Plaid.Client do
   defp plaid_client_id do
     # Not secret
     "5c4cffbeca63910011f18dd8"
+  end
+
+  defp base_url do
+    Application.get_env(:budget, :plaid_url)
   end
 end

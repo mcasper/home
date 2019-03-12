@@ -7,11 +7,20 @@ defmodule BudgetWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+  end
+
+  pipeline :browser_auth do
     plug(BudgetWeb.AuthPlug)
   end
 
+  scope "/", BudgetWeb do
+    pipe_through(:browser)
+    get("/health", HealthController, :index)
+  end
+
   scope "/budget", BudgetWeb do
-    pipe_through :browser
+    pipe_through(:browser)
+    pipe_through(:browser_auth)
 
     get("/", GoalController, :show)
 
