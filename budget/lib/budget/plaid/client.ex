@@ -6,7 +6,7 @@ defmodule Budget.Plaid.Client do
 
   def exchange_token(public_token) do
     request_body = %{
-      "client_id" => "5c4cffbeca63910011f18dd8",
+      "client_id" => plaid_client_id(),
       "secret" => Application.get_env(:budget, :plaid_secret),
       "public_token" => public_token
     }
@@ -27,7 +27,7 @@ defmodule Budget.Plaid.Client do
     today = Date.utc_today()
 
     request_body = %{
-      "client_id" => "5c4cffbeca63910011f18dd8",
+      "client_id" => plaid_client_id(),
       "secret" => Application.get_env(:budget, :plaid_secret),
       "access_token" => access_token,
       "start_date" => Date.to_string(Date.add(today, -30)),
@@ -52,7 +52,7 @@ defmodule Budget.Plaid.Client do
 
   def get_balances(access_token) do
     request_body = %{
-      "client_id" => "5c4cffbeca63910011f18dd8",
+      "client_id" => plaid_client_id(),
       "secret" => Application.get_env(:budget, :plaid_secret),
       "access_token" => access_token
     }
@@ -67,5 +67,10 @@ defmodule Budget.Plaid.Client do
       {:error, %Tesla.Env{status: status, body: _response_body}} ->
         {:error, status}
     end
+  end
+
+  defp plaid_client_id do
+    # Not secret
+    "5c4cffbeca63910011f18dd8"
   end
 end

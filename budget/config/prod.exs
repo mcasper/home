@@ -11,11 +11,23 @@ use Mix.Config
 # before starting your production server.
 config :budget, BudgetWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "casper.coffee", port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: System.get_env("BUDGET_SECRET_KEY_BASE")
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :budget, Budget.Repo,
+  username: "postgres",
+  password: System.get_env("BUDGET_DATABASE_PASSWORD"),
+  database: "budget",
+  hostname: "db",
+  pool_size: 15
+
+config :budget,
+  plaid_url: "https://development.plaid.com",
+  plaid_secret: System.get_env("BUDGET_PLAID_SECRET")
 
 # ## SSL Support
 #
@@ -68,4 +80,3 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which should be versioned
 # separately.
-import_config "prod.secret.exs"

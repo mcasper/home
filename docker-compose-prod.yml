@@ -74,9 +74,7 @@ services:
       - db
     env_file: ./.env
     environment:
-      RAILS_LOG_TO_STDOUT: "true"
-      RAILS_SERVE_STATIC_FILES: "true"
-      JWT_KEY_PATH: "/keys/key.pem"
+      JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
 
 volumes:
   keys:

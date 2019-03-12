@@ -2,6 +2,8 @@
 
 set -eou pipefail
 
+bin/release
+
 TAG=$(git rev-parse HEAD)
 SERVER_IP=68.183.251.146
 
@@ -11,3 +13,4 @@ ssh root@$SERVER_IP TAG=$TAG docker-compose up --force-recreate --remove-orphans
 sleep 5
 
 ssh root@$SERVER_IP TAG=$TAG docker-compose run recipes bundle exec rails db:create db:migrate
+ssh root@$SERVER_IP TAG=$TAG docker-compose run budget mix do ecto.create, ecto.migrate
