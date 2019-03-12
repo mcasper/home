@@ -14,4 +14,4 @@ ssh root@$SERVER_IP TAG=$TAG docker-compose run --rm recipes bundle exec rails d
 ssh root@$SERVER_IP TAG=$TAG docker-compose run --rm budget mix do ecto.create, ecto.migrate
 ssh root@$SERVER_IP TAG=$TAG docker-compose up --force-recreate --remove-orphans -d
 
-docker system prune -af
+ssh root@$SERVER_IP docker system prune -af
