@@ -16,7 +16,7 @@ config :budget, BudgetWeb.Endpoint,
   secret_key_base: System.get_env("BUDGET_SECRET_KEY_BASE")
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: String.to_atom(System.get_env("BUDGET_LOG_LEVEL") || "info")
 
 config :budget, Budget.Repo,
   username: "postgres",

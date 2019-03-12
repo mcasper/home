@@ -7,10 +7,9 @@ bin/release
 TAG=$(git rev-parse HEAD)
 SERVER_IP=68.183.251.146
 
+# TODO: Loop through apps and run bin/deploy
+
 scp docker-compose-prod.yml root@68.183.251.146:docker-compose.yml
+ssh root@$SERVER_IP TAG=$TAG docker-compose run --rm recipes bundle exec rails db:create db:migrate
+ssh root@$SERVER_IP TAG=$TAG docker-compose run --rm budget mix do ecto.create, ecto.migrate
 ssh root@$SERVER_IP TAG=$TAG docker-compose up --force-recreate --remove-orphans -d
-
-sleep 5
-
-ssh root@$SERVER_IP TAG=$TAG docker-compose run recipes bundle exec rails db:create db:migrate
-ssh root@$SERVER_IP TAG=$TAG docker-compose run budget mix do ecto.create, ecto.migrate
