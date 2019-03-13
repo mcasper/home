@@ -59,7 +59,7 @@ defmodule Budget.Plaid.Spend do
   defp extract_income(transactions) do
     txs =
       Enum.filter(transactions, fn transaction ->
-        transaction["amount"] < 0
+        transaction["amount"] < 0 && !(Enum.member?(transaction["category"], "Transfer") && Enum.member?(transaction["category"], "Credit"))
       end)
 
     {:ok, txs}
