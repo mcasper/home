@@ -14,7 +14,10 @@ defmodule BudgetWeb.GoalController do
 
   def create(conn, %{"goal" => goal_params}) do
     current_user = current_user(conn)
-    create_params = Map.merge(goal_params, %{"user_id" => current_user.id})
+    create_params = %{
+      "amount_in_cents" => Money.parse!(goal_params["amount_in_cents"]).amount,
+      "user_id" => current_user.id
+    }
 
     case Budget.Budget.create_goal(create_params) do
       {:ok, _goal} ->

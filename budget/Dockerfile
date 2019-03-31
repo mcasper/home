@@ -1,12 +1,6 @@
-FROM bitwalker/alpine-elixir-phoenix:1.8.0
+FROM bitwalker/alpine-elixir-phoenix:1.8.1
 
 RUN apk add yarn
-# RUN apt update -qq && \
-#   apt install -y \
-#   build-essential \
-#   git \
-#   libpq-dev \
-#   nodejs
 
 ENV APP_HOME /budget
 RUN mkdir $APP_HOME

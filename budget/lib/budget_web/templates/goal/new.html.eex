@@ -6,7 +6,12 @@
   <%= form_for @changeset, Routes.goal_path(@conn, :create), fn f -> %>
     <div class="form-group">
       <%= label(f, :amount_in_cents, "Amount (in cents)", for: "goal_amount_in_cents") %>
-      <%= number_input(f, :amount_in_cents, class: "form-control", id: "goal_amount_in_cents") %>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <%= money_input(f, :amount_in_cents, class: "form-control", id: "goal_amount_in_cents", placeholder: "50,000.00") %>
+      </div>
     </div>
 
     <%= submit("Submit", class: "btn btn-primary") %>

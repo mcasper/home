@@ -34,4 +34,8 @@ defmodule BudgetWeb.GoalView do
     cents = trunc(float * 100)
     format_cents(cents)
   end
+
+  def money_input(form, field, opts) do
+    text_input(form, field, opts ++ [onkeyup: "App.formatPrice(this)"])
+  end
 end
