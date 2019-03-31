@@ -1,11 +1,6 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Budget.Repo.insert!(%Budget.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+alias Budget.Repo
+alias Budget.Plaid.Category
+
+Repo.insert!(Category.changeset(%Category{}, %{"name" => "Food"}))
+Repo.insert!(Category.changeset(%Category{}, %{"name" => "Entertainment"}))
+Repo.insert!(Category.changeset(%Category{}, %{"name" => "Rent"}))

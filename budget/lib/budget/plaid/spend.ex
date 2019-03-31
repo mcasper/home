@@ -18,6 +18,14 @@ defmodule Budget.Plaid.Spend do
     end
   end
 
+  def uncategorized(access_token, ignored_transactions) do
+    with {:ok, %{"accounts" => balances}} = get_balances(access_token),
+         {:ok, transactions} = get_all_transactions(balances, access_token, ignored_transactions),
+         {:ok, uncategorized_transactions} = extract_uncategorized_transactions(transactions) do
+      {:ok, uncategorized_transactions}
+    end
+  end
+
   defp get_balances(access_token) do
     Budget.Plaid.Client.get_balances(access_token)
   end
@@ -35,6 +43,14 @@ defmodule Budget.Plaid.Spend do
         !Enum.member?(ignored_transaction_ids, transaction["transaction_id"])
       end)
 
+    {:ok, txs}
+  end
+
+  def extract_uncategorized_transactions(transactions) do
+    categorized_transaction_ids = Budget.Repo.all(Budget.Plaid.CategorizedTransaction)
+                                  |> Enum.map(&(&1.origin_id))
+    txs =
+      Enum.filter(transactions, &(!Enum.member?(categorized_transaction_ids, &1["transaction_id"])))
     {:ok, txs}
   end
 

@@ -1,4 +1,4 @@
-defmodule BudgetWeb.SpendView do
+defmodule BudgetWeb.CategorizeSpendView do
   use BudgetWeb, :view
 
   def format_float(float) do

@@ -30,6 +30,7 @@ defmodule BudgetWeb.Router do
     post("/plaid/items", PlaidItemController, :create)
 
     get("/spend", SpendController, :index)
+    get("/spend/categorize", CategorizeSpendController, :index)
 
     get("/goal", GoalController, :show)
     get("/goal/edit", GoalController, :edit)
@@ -37,5 +38,6 @@ defmodule BudgetWeb.Router do
     resources("/goals", GoalController, only: [:new, :create])
 
     resources("/ignored_transactions", PlaidIgnoredTransactionController, only: [:create])
+    resources("/categorized_transactions", PlaidCategorizedTransactionController, only: [:create])
   end
 end

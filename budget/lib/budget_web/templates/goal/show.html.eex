@@ -36,5 +36,6 @@
 
 <div class="container-fluid text-center">
   <%= link("View Spend", to: Routes.spend_path(@conn, :index), class: "btn btn-primary") %>
+  <%= link("Categorize Spend", to: Routes.categorize_spend_path(@conn, :index), class: "btn btn-primary") %>
   <%= link("Edit Goal", to: Routes.goal_path(@conn, :edit), class: "btn btn-primary") %>
 </div>

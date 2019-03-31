@@ -1,0 +1,29 @@
+<div class="container-fluid text-center">
+  <%= link("<-- Back to goal", to: Routes.goal_path(@conn, :show)) %>
+</div>
+
+<div class="container-fluid text-center">
+  <h1 class="mt-4">Uncategorized Spend</h1>
+  <p>Add categories to your purchases to get better insight into your spending habits</p>
+</div>
+
+<div class="container-fluid">
+  <div class="col text-center">
+    <ul class="list-group mt-3">
+      <%= for transaction <- @uncategorized_transactions do %>
+        <li class="list-group-item">
+          <p><%= transaction["name"] %></p>
+          <p><%= format_float(transaction["amount"]) %></p>
+          <p><%= transaction["date"] %></p>
+          <p>
+          <%= form_for @conn, Routes.plaid_categorized_transaction_path(@conn, :create), [as: :categorized_transaction], fn f -> %>
+            <%= select(f, :category_id, @categories, class: "custom-select custom-select-lg mb-3") %>
+            <%= hidden_input(f, :origin_id, value: transaction["transaction_id"]) %>
+            <%= submit("Categorize") %>
+          <% end %>
+          </p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
