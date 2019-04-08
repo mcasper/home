@@ -17,8 +17,8 @@
           <p><%= transaction["date"] %></p>
           <p>
           <%= form_for @conn, Routes.plaid_categorized_transaction_path(@conn, :create), [as: :categorized_transaction], fn f -> %>
-            <%= select(f, :category_id, @categories, class: "custom-select custom-select-lg mb-3") %>
-            <%= hidden_input(f, :origin_id, value: transaction["transaction_id"]) %>
+            <%= select(f, :category_id, @categories, id: "category-id-select", class: "custom-select custom-select-lg mb-3") %>
+            <%= hidden_input(f, :origin_id, value: transaction["transaction_id"], id: "transaction-id-hidden") %>
             <%= submit("Categorize") %>
           <% end %>
           </p>
