@@ -1,6 +1,14 @@
 import css from '../css/app.css'
 import 'phoenix_html'
 
+import { Elm } from "../elm/src/CategorizeSpend.elm";
+var categorizeSpendDiv = document.getElementById('elm-categorize-spend');
+if (categorizeSpendDiv !== null) {
+  Elm.Main.init({
+    node: categorizeSpendDiv,
+  });
+}
+
 // A really annoying function to take 1234567890 and turn it into 12,345,678.90
 function splitString(string, size) {
   var pieces = string.split('').reverse();
