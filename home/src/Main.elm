@@ -16,23 +16,21 @@ import Url.Parser.Query as Query
 
 
 developmentSeed =
-    [ { name = "Budget", url = "http://localhost:3000/budget" }
-    , { name = "Scoreboard", url = "http://localhost:3000/scoreboard" }
-    , { name = "Teams", url = "#" }
-    , { name = "Movies", url = "http://localhost:3000/movies" }
-    , { name = "Recipes", url = "http://localhost:3000/recipes" }
+    [ { name = "Budget", url = "http://localhost:3000/budget", enabled = True }
+    , { name = "Scoreboard", url = "http://localhost:3000/scoreboard", enabled = True }
+    , { name = "Teams", url = "#", enabled = True }
+    , { name = "Movies", url = "http://localhost:3000/movies", enabled = True }
+    , { name = "Recipes", url = "http://localhost:3000/recipes", enabled = True }
     ]
 
 
 productionSeed =
-    [ { name = "Budget", url = "https://casper.coffee/budget" }
-    , { name = "Scoreboard", url = "https://casper.coffee/scoreboard" }
-    , { name = "Teams", url = "#" }
-    , { name = "Movies", url = "https://casper.coffee/movies" }
-    , { name = "Recipes", url = "https://casper.coffee/recipes" }
+    [ { name = "Budget", url = "https://casper.coffee/budget", enabled = False }
+    , { name = "Scoreboard", url = "https://casper.coffee/scoreboard", enabled = False }
+    , { name = "Teams", url = "#", enabled = False }
+    , { name = "Movies", url = "https://casper.coffee/movies", enabled = False }
+    , { name = "Recipes", url = "https://casper.coffee/recipes", enabled = True }
     ]
-
-
 
 
 
@@ -92,7 +90,7 @@ type alias Apps =
 
 
 type alias App =
-    { name : String, url : String }
+    { name : String, url : String, enabled : Bool }
 
 
 type alias Config =
@@ -123,6 +121,7 @@ seedFromConfig config =
         _ ->
             developmentSeed
 
+
 webRootFromConfig : Config -> String
 webRootFromConfig config =
     case config.node_env of
@@ -149,7 +148,7 @@ init config url key =
         redirectToAuth config
 
       else
-        (getMe config.session (webRootFromConfig config))
+        getMe config.session (webRootFromConfig config)
     )
 
 
@@ -195,7 +194,7 @@ update msg model =
 
 redirectToAuth : Config -> Cmd Msg
 redirectToAuth config =
-    Nav.load ((webRootFromConfig config) ++ "/auth/login?returnTo=" ++ (webRootFromConfig config) ++ "/")
+    Nav.load (webRootFromConfig config ++ "/auth/login?returnTo=" ++ webRootFromConfig config ++ "/")
 
 
 
@@ -239,11 +238,16 @@ viewApps apps =
 
 viewApp : App -> Html Msg
 viewApp app =
-    a [ style "text-decoration" "none", style "color" "black", style "display" "block", style "width" "33%", style "min-height" "300px", href app.url ]
-        [ div [ style "border" "solid 1px grey", style "margin" "5px", style "height" "75%", style "border-radius" "4px", style "vertical-align" "middle", style "display" "flex" ]
-            [ p [ style "margin" "auto", style "text-align" "center" ] [ text app.name ]
-            ]
-        ]
+    case app.enabled of
+        True ->
+            a [ style "text-decoration" "none", style "color" "black", style "display" "block", style "width" "33%", style "min-height" "300px", href app.url ]
+                [ div [ style "border" "solid 1px grey", style "margin" "5px", style "height" "75%", style "border-radius" "4px", style "vertical-align" "middle", style "display" "flex" ]
+                    [ p [ style "margin" "auto", style "text-align" "center" ] [ text app.name ]
+                    ]
+                ]
+
+        False ->
+            div [] []
 
 
 unauthenticatedView : Html Msg
