@@ -21,6 +21,7 @@ services:
     env_file: .postgres.env
     volumes:
       - /data:/var/lib/postgresql/data
+    container_name: db
 
   home:
     image: mcasper/home-home:${TAG}
@@ -28,6 +29,7 @@ services:
     restart: on-failure
     network_mode: bridge
     env_file: ./.env
+    container_name: home
 
   scoreboard-frontend:
     image: mcasper/home-scoreboard-frontend:${TAG}
@@ -35,6 +37,7 @@ services:
     restart: on-failure
     network_mode: bridge
     env_file: ./.env
+    container_name: scoreboard-frontend
 
   auth:
     image: mcasper/home-auth:${TAG}
@@ -48,6 +51,7 @@ services:
       PORT: 80
       JWT_KEY_PATH: "/keys/key.pem"
       GOOGLE_CREDS_PATH: "/keys/google_creds.json"
+    container_name: auth
 
   recipes:
     image: mcasper/home-recipes:${TAG}
@@ -63,6 +67,7 @@ services:
       RAILS_LOG_TO_STDOUT: "true"
       RAILS_SERVE_STATIC_FILES: "true"
       JWT_KEY_PATH: "/keys/key.pem"
+    container_name: recipes
 
   budget:
     image: mcasper/home-budget:${TAG}
@@ -76,6 +81,7 @@ services:
     env_file: ./.env
     environment:
       JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
+    container_name: budget
 
   movies:
     image: mcasper/home-movies:${TAG}
@@ -87,6 +93,7 @@ services:
     env_file: ./.env
     environment:
       JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
+    container_name: movies
 
 volumes:
   keys:
