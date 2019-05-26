@@ -44,3 +44,7 @@
 ## Queue
 * Name: Queue, Tech: Kafka
 * Responsible for passing messages and events between services
+
+## Trips
+* Name: Trips, Tech: ??
+* Record of the trips we've taken
