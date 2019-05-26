@@ -4,4 +4,6 @@ if ! psql -tc "select 1 from pg_database WHERE datname = 'movies_development';" 
   createdb movies_development
 fi
 
-psql -f migrations/*.sql movies_development 2>&1 | grep -v 'already exists, skipping'
+for file in $(ls migrations/*.sql | sort); do
+  psql -f $file movies_development 2>&1 | grep -v 'already exists, skipping'
+done

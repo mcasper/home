@@ -10,9 +10,16 @@ import (
 	"github.com/revel/revel"
 )
 
+type Location struct {
+	gorm.Model
+	Name string
+}
+
 type Movie struct {
 	gorm.Model
-	Title string
+	Title      string
+	LocationID int
+	Location   Location
 }
 
 type Movies struct {
@@ -21,7 +28,6 @@ type Movies struct {
 
 func (c Movies) Index() revel.Result {
 	db, connErr := gorm.Open("postgres", "postgres://localhost/movies_development?sslmode=disable")
-	db.LogMode(true)
 	if connErr != nil {
 		panic(fmt.Sprintf("failed to connect to database %v: %v", "movies_development", connErr))
 	}
@@ -36,12 +42,22 @@ func (c Movies) Index() revel.Result {
 }
 
 func (c Movies) New() revel.Result {
-	return c.Render()
+	db, connErr := gorm.Open("postgres", "postgres://localhost/movies_development?sslmode=disable")
+	if connErr != nil {
+		panic(fmt.Sprintf("failed to connect to database %v: %v", "movies_development", connErr))
+	}
+	defer db.Close()
+
+	var locations []Location
+	if locationsQueryErr := db.Find(&locations).Error; locationsQueryErr != nil {
+		panic(fmt.Sprintf("encountered an error searching for locations: %v", locationsQueryErr))
+	}
+
+	return c.Render(locations)
 }
 
 func (c Movies) Create(movie Movie) revel.Result {
 	db, connErr := gorm.Open("postgres", "postgres://localhost/movies_development?sslmode=disable")
-	db.LogMode(true)
 	if connErr != nil {
 		panic(fmt.Sprintf("failed to connect to database %v: %v", "movies_development", connErr))
 	}
