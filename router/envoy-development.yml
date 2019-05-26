@@ -42,6 +42,11 @@ static_resources:
                   cluster: budget
 
               - match:
+                  prefix: /movies
+                route:
+                  cluster: movies
+
+              - match:
                   prefix: /
                 route:
                   cluster: home
@@ -88,6 +93,16 @@ static_resources:
     - socket_address:
         address: docker.for.mac.localhost
         port_value: 3001
+
+  - name: movies
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: docker.for.mac.localhost
+        port_value: 3002
 
   - name: home
     connect_timeout: 2.5s
