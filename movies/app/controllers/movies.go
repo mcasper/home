@@ -34,11 +34,16 @@ func (c Movies) Index() revel.Result {
 	defer db.Close()
 
 	var movies []Movie
-	if moviesQueryErr := db.Find(&movies).Error; moviesQueryErr != nil {
+	if moviesQueryErr := db.Preload("Location").Find(&movies).Error; moviesQueryErr != nil {
 		panic(fmt.Sprintf("encountered an error searching for movies: %v", moviesQueryErr))
 	}
 
-	return c.Render(movies)
+	groupedMovies := make(map[string][]Movie)
+	for _, movie := range movies {
+		groupedMovies[movie.Location.Name] = append(groupedMovies[movie.Location.Name], movie)
+	}
+
+	return c.Render(groupedMovies)
 }
 
 func (c Movies) New() revel.Result {

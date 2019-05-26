@@ -1,16 +1,18 @@
 {{set . "title" "Movies - Index"}}
 {{template "header.html" .}}
 
-{{ if not .movies }}
-<p>No movies available</p>
+{{ if not .groupedMovies }}
+  <p>No movies available</p>
 {{ else }}
-<h1>All Movies</h1>
-<ul class="list-group">
-  {{ range .movies }}
-  <li class="list-group-item">{{ .Title }}</li>
-  <li class="list-group-item">{{ .Location.Name }}</li>
+  <h1>All Movies</h1>
+  {{ range $location, $movies := .groupedMovies }}
+  <h3 class="mt-3">{{$location}}</h3>
+  <ul class="list-group">
+    {{ range $movies }}
+    <li class="list-group-item">{{ .Title }}</li>
+    {{ end }}
+  </ul>
   {{ end }}
-</ul>
 {{ end }}
 
 {{template "footer.html" .}}
