@@ -28,7 +28,7 @@ productionSeed =
     [ { name = "Budget", url = "https://casper.coffee/budget", enabled = False }
     , { name = "Scoreboard", url = "https://casper.coffee/scoreboard", enabled = False }
     , { name = "Teams", url = "#", enabled = False }
-    , { name = "Movies", url = "https://casper.coffee/movies", enabled = False }
+    , { name = "Movies", url = "https://casper.coffee/movies", enabled = True }
     , { name = "Recipes", url = "https://casper.coffee/recipes", enabled = True }
     ]
 
