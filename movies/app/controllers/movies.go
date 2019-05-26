@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -27,10 +28,7 @@ type Movies struct {
 }
 
 func (c Movies) Index() revel.Result {
-	db, connErr := gorm.Open("postgres", "postgres://localhost/movies_development?sslmode=disable")
-	if connErr != nil {
-		panic(fmt.Sprintf("failed to connect to database %v: %v", "movies_development", connErr))
-	}
+	db := dbConnection()
 	defer db.Close()
 
 	var movies []Movie
@@ -47,10 +45,7 @@ func (c Movies) Index() revel.Result {
 }
 
 func (c Movies) New() revel.Result {
-	db, connErr := gorm.Open("postgres", "postgres://localhost/movies_development?sslmode=disable")
-	if connErr != nil {
-		panic(fmt.Sprintf("failed to connect to database %v: %v", "movies_development", connErr))
-	}
+	db := dbConnection()
 	defer db.Close()
 
 	var locations []Location
@@ -62,10 +57,7 @@ func (c Movies) New() revel.Result {
 }
 
 func (c Movies) Create(movie Movie) revel.Result {
-	db, connErr := gorm.Open("postgres", "postgres://localhost/movies_development?sslmode=disable")
-	if connErr != nil {
-		panic(fmt.Sprintf("failed to connect to database %v: %v", "movies_development", connErr))
-	}
+	db := dbConnection()
 	defer db.Close()
 
 	if movieValidationErr := validateMovie(movie); movieValidationErr != nil {
@@ -93,4 +85,17 @@ func validateMovie(movie Movie) error {
 	} else {
 		return nil
 	}
+}
+
+func dbConnection() *gorm.DB {
+	databaseUrl := os.Getenv("MOVIE_DATABASE_URL")
+	if databaseUrl == "" {
+		panic("MOVIE_DATABASE_URL must be set")
+	}
+
+	db, connErr := gorm.Open("postgres", databaseUrl)
+	if connErr != nil {
+		panic(fmt.Sprintf("failed to connect to database %v: %v", databaseUrl, connErr))
+	}
+	return db
 }

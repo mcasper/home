@@ -76,5 +76,16 @@ services:
     environment:
       JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
 
+  movies:
+    image: mcasper/home-movies:${TAG}
+    command: cd /go/src/movies && revel run /go/src/movies prod
+    restart: on-failure
+    network_mode: bridge
+    links:
+      - db
+    env_file: ./.env
+    environment:
+      JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
+
 volumes:
   keys:
