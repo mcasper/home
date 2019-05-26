@@ -9,6 +9,7 @@ services:
        - recipes
        - budget
        - auth
+       - movies
     ports:
       - "9901:9901"
       - "80:9000"
