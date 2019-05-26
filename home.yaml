@@ -1,0 +1,17 @@
+apps:
+  router:
+    port: 3000
+  budget:
+    port: 3001
+  movies:
+    port: 3002
+  scoreboard-backend:
+    port: 3003
+  scoreboard-frontend:
+    port: 3004
+  auth:
+    port: 3005
+  home:
+    port: 3006
+  recipes:
+    port: 3007
