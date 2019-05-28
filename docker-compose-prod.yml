@@ -85,7 +85,7 @@ services:
 
   movies:
     image: mcasper/home-movies:${TAG}
-    command: cd /go/src/movies && revel run /go/src/movies prod
+    command: revel run github.com/mcasper/home/movies prod
     restart: on-failure
     network_mode: bridge
     links:
@@ -93,6 +93,7 @@ services:
     env_file: ./.env
     environment:
       JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
+      PORT: 80
     container_name: movies
 
 volumes:
