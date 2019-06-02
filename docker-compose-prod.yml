@@ -13,6 +13,7 @@ services:
     ports:
       - "9901:9901"
       - "80:9000"
+    container_name: router
 
   db:
     image: postgres:11
