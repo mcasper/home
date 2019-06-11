@@ -1,4 +1,4 @@
-#!/Users/mattcasper/.rbenv/shims/ruby
+#!/usr/bin/env ruby
 
 require 'bundler'
 

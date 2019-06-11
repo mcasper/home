@@ -1,4 +1,5 @@
 #!/bin/bash
 
+npm install create-elm-app -g
 elm make src/*.elm
 rm index.html

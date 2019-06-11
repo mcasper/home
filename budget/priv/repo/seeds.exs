@@ -1,6 +1,15 @@
 alias Budget.Repo
 alias Budget.Plaid.Category
 
-Repo.insert!(Category.changeset(%Category{}, %{"name" => "Food"}))
-Repo.insert!(Category.changeset(%Category{}, %{"name" => "Entertainment"}))
-Repo.insert!(Category.changeset(%Category{}, %{"name" => "Rent"}))
+defmodule Seeds do
+  def get_or_insert_category(attrs) do
+    case Repo.get_by(Category, attrs) do
+      nil -> Repo.insert!(Category.changeset(%Category{}, attrs))
+      _ -> nil
+    end
+  end
+end
+
+Seeds.get_or_insert_category([name: "Food"])
+Seeds.get_or_insert_category([name: "Entertainment"])
+Seeds.get_or_insert_category([name: "Rent"])

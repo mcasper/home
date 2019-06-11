@@ -1,5 +1,8 @@
 #!/bin/bash
 
+go get -u github.com/revel/revel
+go get -u github.com/revel/cmd/revel
+
 if ! psql -tc "select 1 from pg_database WHERE datname = 'movies_development';" postgres | grep -q 1; then
   createdb movies_development
 fi
