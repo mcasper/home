@@ -10,6 +10,7 @@ services:
        - budget
        - auth
        - movies
+       - tasks-backend
     ports:
       - "9901:9901"
       - "80:9000"
@@ -96,6 +97,19 @@ services:
       JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
       PORT: 80
     container_name: movies
+
+  tasks-backend:
+    image: mcasper/home-tasks-backend:${TAG}
+    command: go run /go/src/tasks-backend/server/serer.go
+    restart: on-failure
+    network_mode: bridge
+    links:
+      - db
+    env_file: ./.env
+    environment:
+      JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
+      PORT: 80
+    container_name: tasks-backend
 
 volumes:
   keys:

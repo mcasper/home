@@ -326,7 +326,7 @@ viewBody model =
         Just MatchesNew ->
             div []
                 [ viewNav
-                , h1 [ style "margin" "35px" ] [ text "New Scoreboard" ]
+                , h1 [ style "margin" "35px" ] [ text "New Match" ]
                 ]
 
         Nothing ->
@@ -341,7 +341,7 @@ viewNav =
             , a [ href "/", style "text-decoration" "none", style "color" "white" ] [ text "Back to Home" ]
             ]
         , div []
-            [ a [ href "/matches/new", style "text-decoration" "none", style "color" "white" ]
+            [ a [ href "/scoreboard/matches/new", style "text-decoration" "none", style "color" "white" ]
                 [ text "New"
                 ]
             , text "\n|\n"

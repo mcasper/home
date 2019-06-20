@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eou pipefail
+
+export PORT=3008
+export TASKS_DATABASE_URL=postgresql://localhost:5432/home_tasks_development?sslmode=disable
+go run server/server.go

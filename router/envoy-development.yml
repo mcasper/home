@@ -47,6 +47,11 @@ static_resources:
                   cluster: movies
 
               - match:
+                  prefix: /tasks-backend
+                route:
+                  cluster: tasks-backend
+
+              - match:
                   prefix: /
                 route:
                   cluster: home
@@ -113,6 +118,16 @@ static_resources:
     - socket_address:
         address: docker.for.mac.localhost
         port_value: 3006
+
+  - name: tasks-backend
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: docker.for.mac.localhost
+        port_value: 3008
 
 admin:
   access_log_path: /dev/stdout
