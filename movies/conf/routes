@@ -6,6 +6,7 @@
 module:testrunner
 # module:jobs
 
+GET     /health                                 Health.Index
 
 GET     /                                       Movies.Index
 GET     /movies                                 Movies.Index
