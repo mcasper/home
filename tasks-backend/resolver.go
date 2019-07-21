@@ -39,6 +39,18 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input NewTask) (*Task
 	return task, nil
 }
 
+func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input TaskUpdate) (*Task, error) {
+	db := dbConnection()
+	defer db.Close()
+
+	var task Task
+	db.First(&task, id)
+	task.Complete = *input.Complete
+	db.Save(&task)
+
+	return &task, nil
+}
+
 type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Tasks(ctx context.Context) ([]*Task, error) {

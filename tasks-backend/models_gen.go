@@ -5,3 +5,7 @@ package tasks_backend
 type NewTask struct {
 	Text string `json:"text"`
 }
+
+type TaskUpdate struct {
+	Complete *bool `json:"complete"`
+}

@@ -12,6 +12,11 @@ input NewTask {
   text: String!
 }
 
+input TaskUpdate {
+  complete: Boolean!
+}
+
 type Mutation {
   createTask(input: NewTask!): Task!
+  updateTask(id: ID!, input: TaskUpdate!): Task!
 }
