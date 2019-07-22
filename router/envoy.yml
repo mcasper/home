@@ -52,6 +52,11 @@ static_resources:
                   cluster: tasks-backend
 
               - match:
+                  prefix: /tasks
+                route:
+                  cluster: tasks-frontend
+
+              - match:
                   prefix: /
                 route:
                   cluster: home
@@ -176,6 +181,23 @@ static_resources:
     hosts:
     - socket_address:
         address: tasks-backend
+        port_value: 80
+
+  - name: tasks-frontend
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: tasks-frontend
         port_value: 80
 
 admin:
