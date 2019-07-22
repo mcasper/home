@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eou pipefail
+
+export BROWSER=none
+export PORT=3009
+export PUBLIC_URL=/tasks-frontend
+export NODE_ENV=development
+
+exec yarn start
