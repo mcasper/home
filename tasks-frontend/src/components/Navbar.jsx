@@ -6,7 +6,7 @@ class Navbar extends React.Component {
       <nav className='navbar navbar-dark bg-dark' style={{height: '70px', color: 'white'}}>
         <div>
           <a href='/tasks' style={{textDecoration: 'none', color: 'white'}}>Tasks</a>
-          <a href='#' style={{textDecoration: 'none', color: 'white'}}>   |   </a>
+          <a href='/tasks' style={{textDecoration: 'none', color: 'white'}}>   |   </a>
           <a href='/' style={{textDecoration: 'none', color: 'white'}}>Back to Home</a>
         </div>
 
