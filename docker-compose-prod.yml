@@ -101,7 +101,7 @@ services:
 
   tasks-backend:
     image: mcasper/home-tasks-backend:${TAG}
-    command: go run /go/src/tasks-backend/server/server.go
+    command: go run /go/src/github.com/mcasper/home/tasks-backend/server/server.go
     restart: on-failure
     network_mode: bridge
     links:
