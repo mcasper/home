@@ -49,7 +49,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Tasks func(childComplexity int) int
+		Tasks func(childComplexity int, complete *bool) int
 	}
 
 	Task struct {
@@ -64,7 +64,7 @@ type MutationResolver interface {
 	UpdateTask(ctx context.Context, id string, input TaskUpdate) (*Task, error)
 }
 type QueryResolver interface {
-	Tasks(ctx context.Context) ([]*Task, error)
+	Tasks(ctx context.Context, complete *bool) ([]*Task, error)
 }
 type TaskResolver interface {
 	ID(ctx context.Context, obj *Task) (string, error)
@@ -114,7 +114,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Tasks(childComplexity), true
+		args, err := ec.field_Query_tasks_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Tasks(childComplexity, args["complete"].(*bool)), true
 
 	case "Task.complete":
 		if e.complexity.Task.Complete == nil {
@@ -221,7 +226,7 @@ var parsedSchema = gqlparser.MustLoadSchema(
 }
 
 type Query {
-  tasks: [Task!]!
+  tasks(complete: Boolean): [Task!]!
 }
 
 input NewTask {
@@ -229,7 +234,7 @@ input NewTask {
 }
 
 input TaskUpdate {
-  complete: Boolean
+  complete: Boolean!
 }
 
 type Mutation {
@@ -290,6 +295,20 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_tasks_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *bool
+	if tmp, ok := rawArgs["complete"]; ok {
+		arg0, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["complete"] = arg0
 	return args, nil
 }
 
@@ -403,10 +422,17 @@ func (ec *executionContext) _Query_tasks(ctx context.Context, field graphql.Coll
 		IsMethod: true,
 	}
 	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_tasks_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp := ec.FieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Tasks(rctx)
+		return ec.resolvers.Query().Tasks(rctx, args["complete"].(*bool))
 	})
 	if resTmp == nil {
 		if !ec.HasError(rctx) {
@@ -1413,7 +1439,7 @@ func (ec *executionContext) unmarshalInputTaskUpdate(ctx context.Context, v inte
 		switch k {
 		case "complete":
 			var err error
-			it.Complete, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			it.Complete, err = ec.unmarshalNBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}

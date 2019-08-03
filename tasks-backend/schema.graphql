@@ -5,7 +5,7 @@ type Task {
 }
 
 type Query {
-  tasks: [Task!]!
+  tasks(complete: Boolean): [Task!]!
 }
 
 input NewTask {

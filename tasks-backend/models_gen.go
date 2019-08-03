@@ -7,5 +7,5 @@ type NewTask struct {
 }
 
 type TaskUpdate struct {
-	Complete *bool `json:"complete"`
+	Complete bool `json:"complete"`
 }

@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 import { Mutation } from 'react-apollo';
-import { GET_TASKS, CREATE_TASK } from '../queries.js';
+import { GET_INCOMPLETE_TASKS, CREATE_TASK } from '../queries.js';
 
 const NewTask = (props) => {
   const [inputText, setInputText] = useState("");
@@ -14,9 +14,9 @@ const NewTask = (props) => {
     <Mutation
       mutation={CREATE_TASK}
       update={(cache, { data: { createTask: newTask } }) => {
-        const { tasks } = cache.readQuery({ query: GET_TASKS });
+        const { tasks } = cache.readQuery({ query: GET_INCOMPLETE_TASKS });
         cache.writeQuery({
-          query: GET_TASKS,
+          query: GET_INCOMPLETE_TASKS,
           data: { tasks: tasks.concat([newTask]) },
         });
       }}

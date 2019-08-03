@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TaskRow from './TaskRow.jsx';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import NewTask from './NewTask.jsx';
 
 import { Query } from 'react-apollo';
-import { GET_TASKS } from '../queries.js';
+import { GET_INCOMPLETE_TASKS } from '../queries.js';
 
 const TaskList = () => {
   return(
-    <Query query={GET_TASKS}>
+    <Query query={GET_INCOMPLETE_TASKS}>
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
