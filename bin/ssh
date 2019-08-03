@@ -4,4 +4,4 @@ set -eou pipefail
 
 SERVER_IP=68.183.251.146
 
-ssh root@$SERVER_IP
+ssh root@$SERVER_IP "$@"
