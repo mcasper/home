@@ -2,17 +2,23 @@ FROM golang:1.11-alpine
 
 RUN \
   apk add --update --no-cache --virtual .build-deps \
-  git
+  gcc \
+  git \
+  libc-dev
 
-ADD go.mod $GOPATH/src/tasks-backend/go.mod
-ADD go.sum $GOPATH/src/tasks-backend/go.sum
-ADD migrations $GOPATH/src/tasks-backend/migrations
-ADD server $GOPATH/src/tasks-backend/server
-ADD gqlgen.yml $GOPATH/src/tasks-backend/gqlgen.yml
-ADD schema.graphql $GOPATH/src/tasks-backend/schema.graphql
-ADD *.go $GOPATH/src/tasks-backend/
+ENV PROJECT_ROOT $GOPATH/src/github.com/mcasper/home/tasks-backend
 
-WORKDIR $GOPATH/src/tasks-backend/
+ADD go.mod $PROJECT_ROOT/go.mod
+ADD go.sum $PROJECT_ROOT/go.sum
+ADD migrations $PROJECT_ROOT/migrations
+ADD server $PROJECT_ROOT/server
+ADD gqlgen.yml $PROJECT_ROOT/gqlgen.yml
+ADD schema.graphql $PROJECT_ROOT/schema.graphql
+ADD *.go $PROJECT_ROOT/
+
+WORKDIR $PROJECT_ROOT
+
+ENV GO111MODULE on
 
 RUN go get -d -v
 RUN go build -ldflags "-s -w"
