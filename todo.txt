@@ -14,3 +14,4 @@
 [txs] - Record all events in an history service
 [home] - Allow services to be turned on and off dynamically in production
 [cluster] - Allow "household" settings and management
+[inf] - Setup database backups
