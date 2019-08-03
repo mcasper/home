@@ -9,3 +9,8 @@
 [auth] - tests for everything
 [auth] - set secure cookies in prod (behind ssl)
 [cluster] - investigate all extraneous asset calls (hitting home)
+[tasks] - Better loading experience
+[txs] - Send all events to kafka
+[txs] - Record all events in an history service
+[home] - Allow services to be turned on and off dynamically in production
+[cluster] - Allow "household" settings and management

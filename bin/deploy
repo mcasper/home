@@ -2,7 +2,7 @@
 
 set -eou pipefail
 
-#bin/release
+bin/release
 
 TAG=$(git rev-parse HEAD)
 
