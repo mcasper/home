@@ -31,7 +31,7 @@ productionSeed =
     , { name = "Teams", url = "#", enabled = False }
     , { name = "Movies", url = "https://casper.coffee/movies", enabled = True }
     , { name = "Recipes", url = "https://casper.coffee/recipes", enabled = True }
-    , { name = "Tasks", url = "https://casper.coffee/tasks", enabled = False }
+    , { name = "Tasks", url = "https://casper.coffee/tasks", enabled = True }
     ]
 
 
