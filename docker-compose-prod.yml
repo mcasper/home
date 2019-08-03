@@ -11,6 +11,7 @@ services:
        - auth
        - movies
        - tasks-backend
+       - tasks-frontend
     ports:
       - "9901:9901"
       - "80:9000"
@@ -110,6 +111,17 @@ services:
       JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
       PORT: 80
     container_name: tasks-backend
+
+  tasks-frontend:
+    image: mcasper/home-tasks-frontend:${TAG}
+    command: nginx -g "daemon off;"
+    restart: on-failure
+    network_mode: bridge
+    env_file: ./.env
+    environment:
+      JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
+      PORT: 80
+    container_name: tasks-frontend
 
 volumes:
   keys:

@@ -8,7 +8,7 @@ import { Mutation } from 'react-apollo';
 import { GET_INCOMPLETE_TASKS, UPDATE_TASK } from '../queries.js';
 
 function TaskRow(props) {
-  const { task, updateTask } = props;
+  const { task } = props;
 
   return(
     <Mutation
