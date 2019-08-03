@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TaskRow from './TaskRow.jsx';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
+import NewTask from './NewTask.jsx';
 
 function TaskList() {
   const initialTasks = [
@@ -20,8 +21,9 @@ function TaskList() {
       text: 'Make dinner',
       complete: false
     }
-  ]
+  ];
   const [tasks, setTasks] = useState(initialTasks);
+  const [newTask, setNewTask] = useState("");
 
   const handleClick = (taskId) => {
     var newTasks = [];
@@ -33,7 +35,18 @@ function TaskList() {
       newTasks.push(task);
     });
     setTasks(newTasks);
+  };
+
+  const handleChange = (event) => {
+    setNewTask(event.target.value);
   }
+
+  const handleSubmit = (event) => {
+    // Actually do the network stuff
+    setTasks(tasks.concat([{id: 4, text: newTask, complete: false}]));
+    setNewTask("");
+    event.preventDefault();
+  };
 
   return(
     <Container>
@@ -41,6 +54,7 @@ function TaskList() {
 
       <ListGroup>
         {tasks.map(task => <TaskRow task={task} clickCallback={handleClick} key={task.id} />)}
+        <NewTask textValue={newTask} submitCallback={handleSubmit} changeCallback={handleChange} key="form"/>
       </ListGroup>
     </Container>
   )
