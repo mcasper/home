@@ -13,6 +13,9 @@ defmodule BudgetWeb.Router do
     plug(BudgetWeb.AuthPlug)
   end
 
+  forward "/graphql", Absinthe.Plug, schema: BudgetWeb.Graphql.Schema
+  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: BudgetWeb.Graphql.Schema
+
   scope "/", BudgetWeb do
     pipe_through(:browser)
     get("/health", HealthController, :index)

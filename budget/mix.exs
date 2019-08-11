@@ -33,6 +33,8 @@ defmodule Budget.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:absinthe_plug, "~> 1.4"},
+      {:absinthe, "~> 1.4"},
       {:ecto_sql, "~> 3.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.1"},
@@ -45,7 +47,7 @@ defmodule Budget.MixProject do
       {:phoenix_pubsub, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, "~> 0.14"},
-      {:tesla, "~> 1.2"}
+      {:tesla, "~> 1.2"},
     ]
   end
 
