@@ -35,3 +35,6 @@ ps aux | grep '[m]ix phx.server' | awk '{print $2}' | xargs kill -9
 echo "Stopping tasks-backend"
 ps aux | grep '[g]o run server/server.go' | awk '{print $2}' | xargs kill -9
 ps aux | grep '[g]o-build' | grep '[e]xe/server' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping react apps"
+ps aux | grep '[n]ode scripts/start.js' | awk '{print $2}' | xargs kill -9
