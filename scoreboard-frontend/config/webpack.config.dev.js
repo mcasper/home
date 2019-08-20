@@ -44,7 +44,7 @@ module.exports = {
     // require.resolve('webpack-dev-server/client') + '?/',
     // require.resolve('webpack/hot/dev-server'),
     // require.resolve('react-dev-utils/webpackHotDevClient'),
-    require.resolve('../scripts/utils/webpackHotDevClient'),
+    // require.resolve('../scripts/utils/webpackHotDevClient'),
 
     // Errors should be considered fatal in development
     require.resolve('react-error-overlay'),

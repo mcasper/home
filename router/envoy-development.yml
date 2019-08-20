@@ -52,6 +52,11 @@ static_resources:
                   cluster: tasks-frontend
 
               - match:
+                  prefix: /budget-backend
+                route:
+                  cluster: budget-backend
+
+              - match:
                   prefix: /budget
                 route:
                   cluster: budget-frontend
@@ -94,7 +99,7 @@ static_resources:
         address: docker.for.mac.localhost
         port_value: 3007
 
-  - name: budget
+  - name: budget-backend
     connect_timeout: 2.5s
     type: strict_dns
     lb_policy: round_robin
