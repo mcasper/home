@@ -14,8 +14,13 @@ defmodule BudgetWeb.Graphql.Resolvers do
     user = Budget.Accounts.User
            |> Budget.Repo.one()
            |> Budget.Repo.preload(:item)
-    {:ok, txs} = Budget.Plaid.Spend.uncategorized(user.item.access_token, [])
-    {:ok, Enum.map(txs, fn tx -> Map.new(tx, fn {k, v} -> {String.to_atom(k), v} end) end)}
+    case Budget.Plaid.Spend.uncategorized(user.item.access_token, []) do
+      {:ok, txs} ->
+        {:ok, Enum.map(txs, fn tx -> Map.new(tx, fn {k, v} -> {String.to_atom(k), v} end) end)}
+
+      {:error, err} ->
+        {:error, err["error_message"]}
+    end
   end
 end
 

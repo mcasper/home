@@ -1,12 +1,12 @@
 defmodule Budget.Plaid.Spend do
   def calculate(access_token, ignored_transactions) do
-    with {:ok, %{"accounts" => balances}} = get_balances(access_token),
-         {:ok, transactions} = get_all_transactions(balances, access_token, ignored_transactions),
-         {:ok, total_balance} = extract_total_balance(balances),
-         {:ok, spend_transactions} = extract_spend(transactions),
-         {:ok, total_spend} = extract_total_spend(spend_transactions),
-         {:ok, income_transactions} = extract_income(transactions),
-         {:ok, total_income} = extract_total_income(income_transactions) do
+    with {:ok, %{"accounts" => balances}} <- get_balances(access_token),
+         {:ok, transactions} <- get_all_transactions(balances, access_token, ignored_transactions),
+         {:ok, total_balance} <- extract_total_balance(balances),
+         {:ok, spend_transactions} <- extract_spend(transactions),
+         {:ok, total_spend} <- extract_total_spend(spend_transactions),
+         {:ok, income_transactions} <- extract_income(transactions),
+         {:ok, total_income} <- extract_total_income(income_transactions) do
       {:ok,
        %{
          total_balance: total_balance,
@@ -19,9 +19,9 @@ defmodule Budget.Plaid.Spend do
   end
 
   def uncategorized(access_token, ignored_transactions) do
-    with {:ok, %{"accounts" => balances}} = get_balances(access_token),
-         {:ok, transactions} = get_all_transactions(balances, access_token, ignored_transactions),
-         {:ok, uncategorized_transactions} = extract_uncategorized_transactions(transactions) do
+    with {:ok, %{"accounts" => balances}} <- get_balances(access_token),
+         {:ok, transactions} <- get_all_transactions(balances, access_token, ignored_transactions),
+         {:ok, uncategorized_transactions} <- extract_uncategorized_transactions(transactions) do
       {:ok, uncategorized_transactions}
     end
   end
