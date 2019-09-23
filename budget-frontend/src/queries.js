@@ -10,3 +10,9 @@ export const GET_UNCATEGORIZED_TRANSACTIONS = gql`
     }
   }
 `;
+
+export const EXCHANGE_PLAID_TOKEN = gql`
+  mutation exchangePlaidToken($token: String!) {
+    exchangePlaidToken(token: $token)
+  }
+`

@@ -24,7 +24,7 @@ defmodule BudgetWeb.Graphql.Resolvers do
   end
   def get_transactions(_parent, _args, _context), do: {:error, "Unauthorized"}
 
-  def exchange_plaid_token(_parent, %{"token" => token}, %{context: %{user_id: user_id}}) do
+  def exchange_plaid_token(_parent, %{token: token}, %{context: %{user_id: user_id}}) do
     case Budget.Plaid.Client.exchange_token(token) do
       {:ok, %{"access_token" => access_token, "item_id" => item_id}} ->
         current_user = current_user(user_id)
@@ -62,7 +62,7 @@ defmodule BudgetWeb.Graphql.Schema do
 
   mutation do
     field :exchange_plaid_token, type: :string do
-      arg :token
+      arg :token, non_null(:string)
       resolve &BudgetWeb.Graphql.Resolvers.exchange_plaid_token/3
     end
   end
