@@ -13,8 +13,17 @@ defmodule BudgetWeb.Router do
     plug(BudgetWeb.AuthPlug)
   end
 
-  forward "/budget-backend/graphql", Absinthe.Plug, schema: BudgetWeb.Graphql.Schema
-  forward "/budget-backend/graphiql", Absinthe.Plug.GraphiQL, schema: BudgetWeb.Graphql.Schema
+  pipeline :graphql_auth do
+    plug(:fetch_session)
+    plug(BudgetWeb.GraphqlAuthPlug)
+  end
+
+  scope "/budget-backend" do
+    pipe_through(:graphql_auth)
+
+    forward "/graphql", Absinthe.Plug, schema: BudgetWeb.Graphql.Schema
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: BudgetWeb.Graphql.Schema
+  end
 
   scope "/", BudgetWeb do
     pipe_through(:browser)

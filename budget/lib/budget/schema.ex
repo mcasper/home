@@ -10,7 +10,7 @@ defmodule BudgetWeb.Graphql.Types do
 end
 
 defmodule BudgetWeb.Graphql.Resolvers do
-  def get_transactions(_parent, _args, _resolution) do
+  def get_transactions(_parent, _args, %{context: %{user_id: _}}) do
     user = Budget.Accounts.User
            |> Budget.Repo.one()
            |> Budget.Repo.preload(:item)
@@ -19,8 +19,34 @@ defmodule BudgetWeb.Graphql.Resolvers do
         {:ok, Enum.map(txs, fn tx -> Map.new(tx, fn {k, v} -> {String.to_atom(k), v} end) end)}
 
       {:error, err} ->
-        {:error, err["error_message"]}
+        {:error, err}
     end
+  end
+  def get_transactions(_parent, _args, _context), do: {:error, "Unauthorized"}
+
+  def exchange_plaid_token(_parent, %{"token" => token}, %{context: %{user_id: user_id}}) do
+    case Budget.Plaid.Client.exchange_token(token) do
+      {:ok, %{"access_token" => access_token, "item_id" => item_id}} ->
+        current_user = current_user(user_id)
+        Budget.Plaid.delete_existing_items_for_user(current_user)
+
+        {:ok, _} =
+          Budget.Plaid.create_item(%{
+            "access_token" => access_token,
+            "user_id" => current_user.id,
+            "origin_id" => item_id
+          })
+
+        {:ok, "Success"}
+
+      {:error, err} ->
+        {:error, err}
+    end
+  end
+  def exchange_plaid_token(_parent, _args, _context), do: {:error, "Unauthorized"}
+
+  defp current_user(user_id) do
+    Budget.Accounts.get_user!(user_id)
   end
 end
 
@@ -31,6 +57,13 @@ defmodule BudgetWeb.Graphql.Schema do
   query do
     field :transactions, list_of(:transaction) do
       resolve &BudgetWeb.Graphql.Resolvers.get_transactions/3
+    end
+  end
+
+  mutation do
+    field :exchange_plaid_token, type: :string do
+      arg :token
+      resolve &BudgetWeb.Graphql.Resolvers.exchange_plaid_token/3
     end
   end
 end

@@ -3,18 +3,28 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import UncategorizedTransactionRow from './UncategorizedTransactionRow.jsx'
+import NewItem from './NewItem.jsx'
 
 import { Query } from 'react-apollo';
 import { GET_UNCATEGORIZED_TRANSACTIONS } from '../queries.js';
 
 function UncategorizedTransactions(props) {
-  return(
+  return (
     <Query query={GET_UNCATEGORIZED_TRANSACTIONS}>
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
-        if (error) return `Error! ${error.message}`;
+        if (error) {
+          if (error.message === "GraphQL error: Unauthorized") {
+            window.location = "/auth/login?returnTo=/budget"
+            return "Unauthorized"
+          } else {
+            return (
+              < NewItem />
+            )
+          }
+        }
 
-        return(
+        return (
           <Container>
             <Container fluid className="text-center">
               <h1 className="mt-4">Uncategorized Spend</h1>
