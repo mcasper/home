@@ -49,3 +49,15 @@ export const CATEGORIZE_TRANSACTION = gql`
     }
   }
 `
+
+export const GET_CATEGORIZED_SPEND = gql`
+  query categorizedSpend($from: String!) {
+    categorizedSpend(from: $from) {
+      amount
+      category {
+        name
+        id
+      }
+    }
+  }
+`

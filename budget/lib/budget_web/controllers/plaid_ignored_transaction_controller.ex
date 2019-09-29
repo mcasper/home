@@ -4,6 +4,7 @@ defmodule BudgetWeb.PlaidIgnoredTransactionController do
   def create(conn, %{"ignored_transaction" => ignored_transaction_params}) do
     current_user = current_user(conn)
     create_params = Map.merge(ignored_transaction_params, %{"user_id" => current_user.id})
+
     case Budget.Plaid.create_ignored_transaction(create_params) do
       {:ok, _ignored_transaction} ->
         redirect(conn, to: Routes.spend_path(conn, :index))

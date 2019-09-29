@@ -10,6 +10,6 @@ defmodule Seeds do
   end
 end
 
-Seeds.get_or_insert_category([name: "Food"])
-Seeds.get_or_insert_category([name: "Entertainment"])
-Seeds.get_or_insert_category([name: "Rent"])
+Seeds.get_or_insert_category(name: "Food")
+Seeds.get_or_insert_category(name: "Entertainment")
+Seeds.get_or_insert_category(name: "Rent")

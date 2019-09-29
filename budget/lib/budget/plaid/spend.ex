@@ -1,7 +1,8 @@
 defmodule Budget.Plaid.Spend do
   def calculate(access_token, ignored_transactions) do
     with {:ok, %{"accounts" => balances}} <- get_balances(access_token),
-         {:ok, transactions} <- get_all_transactions(balances, access_token, ignored_transactions),
+         {:ok, transactions} <-
+           get_all_transactions(balances, access_token, ignored_transactions),
          {:ok, total_balance} <- extract_total_balance(balances),
          {:ok, spend_transactions} <- extract_spend(transactions),
          {:ok, total_spend} <- extract_total_spend(spend_transactions),
@@ -18,9 +19,21 @@ defmodule Budget.Plaid.Spend do
     end
   end
 
+  def categorized_spend(access_token, ignored_transactions) do
+    with {:ok, %{"accounts" => balances}} <- get_balances(access_token),
+         {:ok, transactions} <-
+           get_all_transactions(balances, access_token, ignored_transactions),
+         {:ok, categorized_transactions} <- get_all_categorized_transactions(),
+         {:ok, categorized_spend} <-
+           extract_categorized_spend(transactions, categorized_transactions) do
+      {:ok, categorized_spend}
+    end
+  end
+
   def uncategorized(access_token, ignored_transactions) do
     with {:ok, %{"accounts" => balances}} <- get_balances(access_token),
-         {:ok, transactions} <- get_all_transactions(balances, access_token, ignored_transactions),
+         {:ok, transactions} <-
+           get_all_transactions(balances, access_token, ignored_transactions),
          {:ok, uncategorized_transactions} <- extract_uncategorized_transactions(transactions) do
       {:ok, uncategorized_transactions}
     end
@@ -31,7 +44,8 @@ defmodule Budget.Plaid.Spend do
   end
 
   defp get_all_transactions(balances, access_token, ignored_transactions) do
-    ignored_transaction_ids = Enum.map(ignored_transactions, &(&1.origin_id))
+    ignored_transaction_ids = Enum.map(ignored_transactions, & &1.origin_id)
+
     txs =
       Enum.flat_map(balances, fn balance ->
         {:ok, %{"transactions" => transactions}} =
@@ -46,11 +60,17 @@ defmodule Budget.Plaid.Spend do
     {:ok, txs}
   end
 
-  def extract_uncategorized_transactions(transactions) do
-    categorized_transaction_ids = Budget.Repo.all(Budget.Plaid.CategorizedTransaction)
-                                  |> Enum.map(&(&1.origin_id))
+  defp extract_uncategorized_transactions(transactions) do
+    categorized_transaction_ids =
+      Budget.Repo.all(Budget.Plaid.CategorizedTransaction)
+      |> Enum.map(& &1.origin_id)
+
     txs =
-      Enum.filter(transactions, &(!Enum.member?(categorized_transaction_ids, &1["transaction_id"])))
+      Enum.filter(
+        transactions,
+        &(!Enum.member?(categorized_transaction_ids, &1["transaction_id"]))
+      )
+
     {:ok, txs}
   end
 
@@ -66,7 +86,9 @@ defmodule Budget.Plaid.Spend do
   defp extract_spend(transactions) do
     txs =
       Enum.filter(transactions, fn transaction ->
-        transaction["amount"] > 0 && !(Enum.member?(transaction["category"], "Payment") && Enum.member?(transaction["category"], "Credit Card"))
+        transaction["amount"] > 0 &&
+          !(Enum.member?(transaction["category"], "Payment") &&
+              Enum.member?(transaction["category"], "Credit Card"))
       end)
 
     {:ok, txs}
@@ -75,13 +97,15 @@ defmodule Budget.Plaid.Spend do
   defp extract_income(transactions) do
     txs =
       Enum.filter(transactions, fn transaction ->
-        transaction["amount"] < 0 && !(Enum.member?(transaction["category"], "Transfer") && Enum.member?(transaction["category"], "Credit"))
+        transaction["amount"] < 0 &&
+          !(Enum.member?(transaction["category"], "Transfer") &&
+              Enum.member?(transaction["category"], "Credit"))
       end)
 
     {:ok, txs}
   end
 
-  def extract_total_spend(transactions) do
+  defp extract_total_spend(transactions) do
     total =
       transactions
       |> Enum.map(& &1["amount"])
@@ -90,12 +114,37 @@ defmodule Budget.Plaid.Spend do
     {:ok, total}
   end
 
-  def extract_total_income(transactions) do
+  defp extract_total_income(transactions) do
     total =
       transactions
       |> Enum.map(&abs(&1["amount"]))
       |> Enum.sum()
 
     {:ok, total}
+  end
+
+  defp get_all_categorized_transactions() do
+    categorized_transactions =
+      Budget.Plaid.CategorizedTransaction
+      |> Budget.Repo.all()
+      |> Budget.Repo.preload(:category)
+
+    {:ok, categorized_transactions}
+  end
+
+  defp extract_categorized_spend(all_transactions, categorized_transactions) do
+    categorized_spend =
+      all_transactions
+      |> Enum.group_by(fn transaction ->
+        categorized_transactions
+        |> Enum.filter(&(&1.origin_id == transaction["transaction_id"]))
+        |> List.first()
+        |> (& &1.category).()
+      end)
+      |> Enum.map(fn {k, v} ->
+        {k, Enum.reduce(v, 0, fn x, acc -> acc + abs(x["amount"]) end)}
+      end)
+
+    {:ok, categorized_spend}
   end
 end

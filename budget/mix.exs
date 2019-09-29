@@ -47,7 +47,7 @@ defmodule Budget.MixProject do
       {:phoenix_pubsub, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, "~> 0.14"},
-      {:tesla, "~> 1.2"},
+      {:tesla, "~> 1.2"}
     ]
   end
 
