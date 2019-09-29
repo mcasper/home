@@ -5,8 +5,9 @@ defmodule BudgetWeb.SpendController do
   plug BudgetWeb.HasGoalPlug
 
   def index(conn, _params) do
-    current_user = current_user(conn)
-                   |> Budget.Repo.preload([:item, :ignored_transactions])
+    current_user =
+      current_user(conn)
+      |> Budget.Repo.preload([:item, :ignored_transactions])
 
     case current_user.item do
       nil ->

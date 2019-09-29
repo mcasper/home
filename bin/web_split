@@ -3,7 +3,7 @@
 set -eou pipefail
 
 ROOT=$HOME/code/home/home
-APPS=(auth budget home movies recipes router scoreboard-frontend scoreboard-backend)
+APPS=(auth budget budget-frontend home movies recipes router scoreboard-frontend scoreboard-backend)
 for app in ${APPS[@]}; do
   tmux new-window -d -c $ROOT/$app -n $app ./bin/web
 #  tmux set-window-option -t $app remain-on-exit on

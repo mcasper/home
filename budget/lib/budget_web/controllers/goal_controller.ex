@@ -14,6 +14,7 @@ defmodule BudgetWeb.GoalController do
 
   def create(conn, %{"goal" => goal_params}) do
     current_user = current_user(conn)
+
     create_params = %{
       "amount_in_cents" => Money.parse!(goal_params["amount_in_cents"]).amount,
       "user_id" => current_user.id
@@ -31,7 +32,9 @@ defmodule BudgetWeb.GoalController do
   end
 
   def show(conn, _params) do
-    current_user = current_user(conn) |> Budget.Repo.preload([:item, :goal, :ignored_transactions])
+    current_user =
+      current_user(conn) |> Budget.Repo.preload([:item, :goal, :ignored_transactions])
+
     goal = current_user.goal
 
     case current_user.item do

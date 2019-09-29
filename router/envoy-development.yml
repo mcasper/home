@@ -37,11 +37,6 @@ static_resources:
                   cluster: recipes
 
               - match:
-                  prefix: /budget
-                route:
-                  cluster: budget
-
-              - match:
                   prefix: /movies
                 route:
                   cluster: movies
@@ -55,6 +50,16 @@ static_resources:
                   prefix: /tasks
                 route:
                   cluster: tasks-frontend
+
+              - match:
+                  prefix: /budget-backend
+                route:
+                  cluster: budget-backend
+
+              - match:
+                  prefix: /budget
+                route:
+                  cluster: budget-frontend
 
               - match:
                   prefix: /
@@ -94,7 +99,7 @@ static_resources:
         address: docker.for.mac.localhost
         port_value: 3007
 
-  - name: budget
+  - name: budget-backend
     connect_timeout: 2.5s
     type: strict_dns
     lb_policy: round_robin
@@ -143,6 +148,16 @@ static_resources:
     - socket_address:
         address: docker.for.mac.localhost
         port_value: 3009
+
+  - name: budget-frontend
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: docker.for.mac.localhost
+        port_value: 3010
 
 admin:
   access_log_path: /dev/stdout

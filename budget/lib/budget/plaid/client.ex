@@ -15,10 +15,13 @@ defmodule Budget.Plaid.Client do
         {:ok, response_body}
 
       {:ok, %Tesla.Env{body: response_body}} ->
-        {:error, response_body}
+        {:error, response_body["error_message"]}
 
       {:error, %Tesla.Env{status: status, body: _response_body}} ->
         {:error, status}
+
+      {:error, :econnrefused} ->
+        {:error, "Connection refused"}
     end
   end
 
@@ -42,10 +45,13 @@ defmodule Budget.Plaid.Client do
         {:ok, response_body}
 
       {:ok, %Tesla.Env{body: response_body}} ->
-        {:error, response_body}
+        {:error, response_body["error_message"]}
 
       {:error, %Tesla.Env{status: status, body: _response_body}} ->
         {:error, status}
+
+      {:error, :econnrefused} ->
+        {:error, "Connection refused"}
     end
   end
 
@@ -61,10 +67,13 @@ defmodule Budget.Plaid.Client do
         {:ok, response_body}
 
       {:ok, %Tesla.Env{body: response_body}} ->
-        {:error, response_body}
+        {:error, response_body["error_message"]}
 
       {:error, %Tesla.Env{status: status, body: _response_body}} ->
         {:error, status}
+
+      {:error, :econnrefused} ->
+        {:error, "Connection refused"}
     end
   end
 
