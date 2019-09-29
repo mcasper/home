@@ -37,9 +37,14 @@ static_resources:
                   cluster: recipes
 
               - match:
+                  prefix: /budget-backend
+                route:
+                  cluster: budget-backend
+
+              - match:
                   prefix: /budget
                 route:
-                  cluster: budget
+                  cluster: budget-frontend
 
               - match:
                   prefix: /movies
@@ -198,6 +203,23 @@ static_resources:
     hosts:
     - socket_address:
         address: tasks-frontend
+        port_value: 80
+
+  - name: budget-frontend
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: budget-frontend
         port_value: 80
 
 admin:
