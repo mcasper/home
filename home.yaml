@@ -1,7 +1,7 @@
 apps:
   router:
     port: 3000
-  budget:
+  budget-backend:
     port: 3001
   movies:
     port: 3002
@@ -15,3 +15,9 @@ apps:
     port: 3006
   recipes:
     port: 3007
+  tasks-backend:
+    port: 3008
+  tasks-frontend:
+    port: 3009
+  budget-frontend:
+    port: 3010
