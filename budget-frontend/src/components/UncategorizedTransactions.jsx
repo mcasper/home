@@ -6,11 +6,11 @@ import UncategorizedTransactionRow from './UncategorizedTransactionRow.jsx'
 import NewItem from './NewItem.jsx'
 
 import { Query } from 'react-apollo';
-import { GET_UNCATEGORIZED_TRANSACTIONS } from '../queries.js';
+import { GET_CATEGORIES_AND_UNCATEGORIZED_TRANSACTIONS } from '../queries.js';
 
 function UncategorizedTransactions(props) {
   return (
-    <Query query={GET_UNCATEGORIZED_TRANSACTIONS}>
+    <Query query={GET_CATEGORIES_AND_UNCATEGORIZED_TRANSACTIONS}>
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) {
@@ -34,7 +34,7 @@ function UncategorizedTransactions(props) {
             <Container fluid>
               <Col className="text-center">
                 <ListGroup className="mt-3">
-                  {data.transactions.map(tx => <UncategorizedTransactionRow key={tx.transactionId} transaction={tx} />)}
+                  {data.transactions.map(tx => <UncategorizedTransactionRow key={tx.transactionId} transaction={tx} categories={data.categories} />)}
                 </ListGroup>
               </Col>
             </Container>

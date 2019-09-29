@@ -8,7 +8,7 @@ function handleOnExit() {
 }
 
 function NewItem(props) {
-  const [exchangePlaidToken, { data }] = useMutation(EXCHANGE_PLAID_TOKEN);
+  const [exchangePlaidToken, { _data }] = useMutation(EXCHANGE_PLAID_TOKEN);
 
   return (
     <div className="container-fluid text-center">

@@ -121,4 +121,12 @@ defmodule Budget.Plaid do
     |> CategorizedTransaction.changeset(attrs)
     |> Repo.insert()
   end
+
+  alias Budget.Plaid.Category
+
+  def create_category(attrs \\ %{}) do
+    %Category{}
+    |> Category.changeset(attrs)
+    |> Repo.insert()
+  end
 end
