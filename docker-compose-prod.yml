@@ -7,7 +7,7 @@ services:
        - scoreboard-frontend
        - home
        - recipes
-       - budget
+       - budget-backend
        - auth
        - movies
        - tasks-backend
@@ -73,7 +73,7 @@ services:
       JWT_KEY_PATH: "/keys/key.pem"
     container_name: recipes
 
-  budget:
+  budget-backend:
     image: mcasper/home-budget:${TAG}
     command: mix phx.server
     restart: on-failure
@@ -85,7 +85,7 @@ services:
     env_file: ./.env
     environment:
       JWT_PUBLIC_KEY_PATH: "/keys/key.pem"
-    container_name: budget
+    container_name: budget-backend
 
   movies:
     image: mcasper/home-movies:${TAG}

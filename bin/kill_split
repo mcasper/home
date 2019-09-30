@@ -2,7 +2,7 @@
 
 set -eou pipefail
 
-APPS=(auth budget home movies recipes router scoreboard-frontend scoreboard-backend)
+APPS=(auth budget home movies recipes router scoreboard-frontend scoreboard-backend budget-frontend)
 for app in ${APPS[@]}; do
   tmux send-keys -t $app C-c
 done

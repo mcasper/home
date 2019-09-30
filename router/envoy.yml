@@ -120,7 +120,7 @@ static_resources:
         address: recipes
         port_value: 80
 
-  - name: budget
+  - name: budget-backend
     health_checks:
       timeout: 1s
       interval: 10s
@@ -134,7 +134,7 @@ static_resources:
     max_requests_per_connection: 1
     hosts:
     - socket_address:
-        address: budget
+        address: budget-backend
         port_value: 80
 
   - name: movies
