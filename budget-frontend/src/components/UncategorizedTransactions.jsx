@@ -18,10 +18,10 @@ function UncategorizedTransactions(props) {
   if (loading) return 'Loading...';
 
   if (error) {
-    if (error.message === "GraphQL error: Unauthorized") {
+    if (error.message.includes("GraphQL error: Unauthorized")) {
       window.location = "/auth/login?returnTo=/budget"
       return "Unauthorized"
-    } else if (error.message === "GraphQL error: Plaid auth required") {
+    } else if (error.message.includes("GraphQL error: Plaid auth required")) {
       return (
         < NewItem />
       )

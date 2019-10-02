@@ -3,7 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import { CATEGORIZE_TRANSACTION } from '../queries.js'
+import { CATEGORIZE_TRANSACTION } from '../queries.js';
 import { GET_CATEGORIES_AND_UNCATEGORIZED_TRANSACTIONS } from '../queries.js';
 import { useMutation } from '@apollo/react-hooks';
 

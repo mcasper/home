@@ -61,3 +61,11 @@ export const GET_CATEGORIZED_SPEND = gql`
     }
   }
 `
+
+export const CREATE_CATEGORY = gql`
+  mutation createCategory($name: String!) {
+    createCategory(name: $name) {
+      name
+    }
+  }
+`
