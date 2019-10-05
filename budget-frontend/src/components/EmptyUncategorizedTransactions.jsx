@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
 import NewItem from './NewItem.jsx'
 
 import { useQuery } from '@apollo/react-hooks';
@@ -40,9 +41,20 @@ function EmptyUncategorizedTransactions(props) {
       <Container fluid className="text-center">
         <h1 className="mt-4">All transactions categorized!</h1>
 
-        {data.categorizedSpend.map(spend => <p key={spend.category.name}>{spend.category.name}: {spend.amount}</p>)}
+        <ListGroup>
+          {data.categorizedSpend.map(spend => {
+            return (
+              <a style={{ textDecoration: "none", color: "black" }} key={spend.category.name} href="#">
+                <ListGroup.Item key={spend.category.name}>
+                  <p><b>{spend.category.name}</b></p>
+                  <p>{spend.amount}</p>
+                </ListGroup.Item>
+              </a>
+            )
+          })}
+        </ListGroup>
       </Container>
-    </Container>
+    </Container >
   );
 }
 

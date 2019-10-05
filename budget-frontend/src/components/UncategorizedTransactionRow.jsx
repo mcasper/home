@@ -41,7 +41,7 @@ function UncategorizedTransactionRow(props) {
         }}>
           <Form.Row>
             <Container>
-              {categories.map(category => <Button variant="primary" onClick={() => setSelectedValue(category.id)} className="mr-4" key={category.id} type="submit">{category.name}</Button>)}
+              {categories.map(category => <Button variant="primary" onClick={() => setSelectedValue(category.id)} className="mt-2 mr-4" key={category.id} type="submit">{category.name}</Button>)}
             </Container>
           </Form.Row>
         </Form>
