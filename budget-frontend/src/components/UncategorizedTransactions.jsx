@@ -5,7 +5,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import UncategorizedTransactionRow from './UncategorizedTransactionRow.jsx';
 import NewItem from './NewItem.jsx';
 import NewCategory from './NewCategory.jsx';
-import EmptyUncategorizedTransactions from './EmptyUncategorizedTransactions.jsx';
+import CategorizedSpend from './CategorizedSpend';
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -31,7 +31,7 @@ function UncategorizedTransactions(props) {
   }
 
   if (data.transactions.length === 0) {
-    return <EmptyUncategorizedTransactions />
+    return <CategorizedSpend />
   } else {
     return (
       <Router>

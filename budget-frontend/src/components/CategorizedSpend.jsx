@@ -12,7 +12,7 @@ function defaultFrom() {
   return date.toISOString()
 }
 
-function EmptyUncategorizedTransactions(props) {
+function CategorizedSpend(props) {
   const [from, _setFrom] = useState(defaultFrom());
   const { loading, error, data } = useQuery(
     GET_CATEGORIZED_SPEND,
@@ -58,4 +58,4 @@ function EmptyUncategorizedTransactions(props) {
   );
 }
 
-export default EmptyUncategorizedTransactions;
+export default CategorizedSpend;
