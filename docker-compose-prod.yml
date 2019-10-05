@@ -74,7 +74,7 @@ services:
     container_name: recipes
 
   budget-backend:
-    image: mcasper/home-budget:${TAG}
+    image: mcasper/home-budget-backend:${TAG}
     command: mix phx.server
     restart: on-failure
     network_mode: bridge

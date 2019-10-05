@@ -1,5 +1,5 @@
 home-frontend: cd home && bin/web
-budget: cd budget && bin/web
+budget-backend: cd budget-backend && bin/web
 budget-frontend: cd budget-frontend && bin/web
 movies: cd movies && bin/web
 scoreboard-frontend: cd scoreboard-frontend && bin/web
