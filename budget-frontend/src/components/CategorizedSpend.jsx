@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import NewItem from './NewItem.jsx';
 import CategorizedTransactions from './CategorizedTransactions.jsx';
+import { formattedAmount } from '../utilities.js';
 
 import { useQuery } from '@apollo/react-hooks';
 import { GET_CATEGORIZED_SPEND } from '../queries.js';
@@ -13,15 +14,6 @@ function defaultFrom() {
   var date = new Date();
   date.setDate(date.getDate() - 30)
   return date.toISOString()
-}
-
-function formattedAmount(amount) {
-  var roundedNumber = Number((amount).toFixed(2)).toString();
-  var parts = roundedNumber.split(".");
-  while (parts[1].length < 2) {
-    parts[1] = parts[1] + "0";
-  }
-  return parts.join(".")
 }
 
 function CategorizedSpend(props) {
@@ -62,7 +54,7 @@ function CategorizedSpend(props) {
                     <Link to={`/budget/categories/${spend.category.name}`} style={{ textDecoration: "none", color: "black" }} key={spend.category.name}>
                       <ListGroup.Item key={spend.category.name}>
                         <p><b>{spend.category.name}</b></p>
-                        <p>{formattedAmount(spend.amount)}</p>
+                        <p>${formattedAmount(spend.amount)}</p>
                       </ListGroup.Item>
                     </Link>
                   )
@@ -75,7 +67,7 @@ function CategorizedSpend(props) {
         {data.categorizedSpend.map(spend => {
           return (
             <Route path={`/budget/categories/${spend.category.name}`} key={`${spend.category.name}-route`}>
-              <CategorizedTransactions />
+              <CategorizedTransactions category={spend.category} totalSpend={spend.amount} />
             </Route>
           )
         })}

@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import { CATEGORIZE_TRANSACTION } from '../queries.js';
 import { GET_CATEGORIES_AND_UNCATEGORIZED_TRANSACTIONS } from '../queries.js';
 import { useMutation } from '@apollo/react-hooks';
+import { formattedAmount } from '../utilities.js';
 
 function UncategorizedTransactionRow(props) {
   let { transaction, categories } = props;
@@ -27,7 +28,7 @@ function UncategorizedTransactionRow(props) {
   return (
     <ListGroup.Item>
       <p>{transaction.name}</p>
-      <p>{transaction.amount}</p>
+      <p>${formattedAmount(transaction.amount)}</p>
       <p>{transaction.date}</p>
       <Container>
         <Form onSubmit={(e) => {

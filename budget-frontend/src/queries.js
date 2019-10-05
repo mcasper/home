@@ -70,3 +70,14 @@ export const CREATE_CATEGORY = gql`
     }
   }
 `
+
+export const GET_CATEGORIZED_TRANSACTIONS = gql`
+  query transactions($categoryId: ID!) {
+    transactions(categoryId: $categoryId) {
+      amount
+      date
+      name
+      transactionId
+    }
+  }
+`
