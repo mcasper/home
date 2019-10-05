@@ -26,7 +26,7 @@ defmodule BudgetWeb.Graphql.Types do
 end
 
 defmodule BudgetWeb.Graphql.Resolvers do
-  def get_transactions(_parent, _args, %{context: %{user_id: user_id}}) do
+  def get_transactions(_parent, args, %{context: %{user_id: user_id}}) do
     current_user =
       current_user(user_id)
       |> Budget.Repo.preload(:item)
@@ -36,13 +36,26 @@ defmodule BudgetWeb.Graphql.Resolvers do
         {:error, "Plaid auth required"}
 
       item ->
-        case Budget.Plaid.Spend.uncategorized(item.access_token, []) do
-          {:ok, txs} ->
-            {:ok,
-             Enum.map(txs, fn tx -> Map.new(tx, fn {k, v} -> {String.to_atom(k), v} end) end)}
+        case args do
+          %{category_id: category_id} ->
+            case Budget.Plaid.Spend.with_category(item.access_token, category_id) do
+              {:ok, txs} ->
+                {:ok,
+                 Enum.map(txs, fn tx -> Map.new(tx, fn {k, v} -> {String.to_atom(k), v} end) end)}
 
-          {:error, err} ->
-            {:error, err}
+              {:error, err} ->
+                {:error, err}
+            end
+
+          _ ->
+            case Budget.Plaid.Spend.uncategorized(item.access_token, []) do
+              {:ok, txs} ->
+                {:ok,
+                 Enum.map(txs, fn tx -> Map.new(tx, fn {k, v} -> {String.to_atom(k), v} end) end)}
+
+              {:error, err} ->
+                {:error, err}
+            end
         end
     end
   end
@@ -159,6 +172,7 @@ defmodule BudgetWeb.Graphql.Schema do
 
   query do
     field :transactions, list_of(:transaction) do
+      arg(:category_id, :id)
       resolve(&BudgetWeb.Graphql.Resolvers.get_transactions/3)
     end
 

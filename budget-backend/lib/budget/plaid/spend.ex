@@ -1,4 +1,6 @@
 defmodule Budget.Plaid.Spend do
+  import Ecto.Query
+
   def calculate(access_token, ignored_transactions) do
     with {:ok, %{"accounts" => balances}} <- get_balances(access_token),
          {:ok, transactions} <-
@@ -36,6 +38,16 @@ defmodule Budget.Plaid.Spend do
            get_all_transactions(balances, access_token, ignored_transactions),
          {:ok, uncategorized_transactions} <- extract_uncategorized_transactions(transactions) do
       {:ok, uncategorized_transactions}
+    end
+  end
+
+  def with_category(access_token, category_id, ignored_transactions \\ []) do
+    with {:ok, %{"accounts" => balances}} <- get_balances(access_token),
+         {:ok, transactions} <-
+           get_all_transactions(balances, access_token, ignored_transactions),
+         {:ok, filtered_transactions} <-
+           extract_transactions_with_category(transactions, category_id) do
+      {:ok, filtered_transactions}
     end
   end
 
@@ -146,5 +158,19 @@ defmodule Budget.Plaid.Spend do
       end)
 
     {:ok, categorized_spend}
+  end
+
+  defp extract_transactions_with_category(all_transactions, category_id) do
+    categorized_transaction_ids =
+      Budget.Plaid.CategorizedTransaction
+      |> where([ct], ct.category_id == ^category_id)
+      |> Budget.Repo.all()
+      |> Enum.map(fn ct -> ct.origin_id end)
+
+    filtered_transactions =
+      all_transactions
+      |> Enum.filter(fn tx -> Enum.member?(categorized_transaction_ids, tx["transaction_id"]) end)
+
+    {:ok, filtered_transactions}
   end
 end
