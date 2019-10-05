@@ -15,6 +15,15 @@ function defaultFrom() {
   return date.toISOString()
 }
 
+function formattedAmount(amount) {
+  var roundedNumber = Number((amount).toFixed(2)).toString();
+  var parts = roundedNumber.split(".");
+  while (parts[1].length < 2) {
+    parts[1] = parts[1] + "0";
+  }
+  return parts.join(".")
+}
+
 function CategorizedSpend(props) {
   const [from, _setFrom] = useState(defaultFrom());
   const { loading, error, data } = useQuery(
@@ -53,7 +62,7 @@ function CategorizedSpend(props) {
                     <Link to={`/budget/categories/${spend.category.name}`} style={{ textDecoration: "none", color: "black" }} key={spend.category.name}>
                       <ListGroup.Item key={spend.category.name}>
                         <p><b>{spend.category.name}</b></p>
-                        <p>{spend.amount}</p>
+                        <p>{formattedAmount(spend.amount)}</p>
                       </ListGroup.Item>
                     </Link>
                   )
@@ -65,7 +74,7 @@ function CategorizedSpend(props) {
 
         {data.categorizedSpend.map(spend => {
           return (
-            <Route path={`/budget/categories/${spend.category.name}`}>
+            <Route path={`/budget/categories/${spend.category.name}`} key={`${spend.category.name}-route`}>
               <CategorizedTransactions />
             </Route>
           )
