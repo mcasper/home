@@ -1,18 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-set -eou pipefail
+require 'fileutils'
+require 'yaml'
+require_relative './runner.rb'
 
-APPS=(home scoreboard-frontend router recipes auth budget budget-frontend movies tasks-backend tasks-frontend)
-for app in ${APPS[@]}; do
-  pushd $app
+apps = YAML.load_file('home.yaml').fetch('apps')
 
-  if [ -x bin/release ]; then
-    bin/release
-  else
-    TAG=mcasper/home-$app:$(git rev-parse HEAD)
-    docker build -t $TAG .
-    docker push $TAG
-  fi
-
-  popd
-done
+apps.each do |app, _|
+  FileUtils.chdir(app) do
+    if File.exist?('bin/release')
+      run('bin/release')
+    else
+      sha = `git rev-parse HEAD`.strip
+      tag = "mcasper/home-#{app}:#{sha}"
+      run("docker build -t #{tag} .")
+      run("docker push #{tag}")
+    end
+  end
+end
