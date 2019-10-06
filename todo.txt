@@ -1,7 +1,9 @@
 [budget] - Accounts index
-[budget] - Spend categorization
 [budget] - Setup a budget with categories
 [budget] - Track spend against that budget
+[budget] - Breadcrumbs
+[budget] - Other entrypoints than /budget (refresh on /budget/categories/new breaks)
+[budget] - Universal routing
 [recipes] - empty list page
 [recipes] - add categories to recipes
 [recipes] - group and filter by recipes
@@ -15,3 +17,4 @@
 [home] - Allow services to be turned on and off dynamically in production
 [cluster] - Allow "household" settings and management
 [inf] - Setup database backups
+[scoreboard] - Implement and roll Teams into it
