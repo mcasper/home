@@ -31,7 +31,7 @@ function CategorizedSpend(props) {
     if (error.message === "GraphQL error: Unauthorized") {
       window.location = "/auth/login?returnTo=/budget"
       return "Unauthorized"
-    } else if (error.message === "GraphQL error: Plaid auth required") {
+    } else if (error.message.includes("GraphQL error: Plaid auth required") || error.message.includes("the login details of this item have changed")) {
       return (
         < NewItem />
       )
