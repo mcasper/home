@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -eou pipefail
+
+exec systemfd --no-pid -s http::3011 -- cargo watch -x run

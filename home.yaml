@@ -21,3 +21,5 @@ apps:
     port: 3009
   budget-frontend:
     port: 3010
+  exercise:
+    port: 3011

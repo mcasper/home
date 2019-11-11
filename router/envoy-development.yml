@@ -62,6 +62,11 @@ static_resources:
                   cluster: budget-frontend
 
               - match:
+                  prefix: /exercise
+                route:
+                  cluster: exercise
+
+              - match:
                   prefix: /
                 route:
                   cluster: home
@@ -158,6 +163,16 @@ static_resources:
     - socket_address:
         address: docker.for.mac.localhost
         port_value: 3010
+
+  - name: exercise
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: docker.for.mac.localhost
+        port_value: 3011
 
 admin:
   access_log_path: /dev/stdout

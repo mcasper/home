@@ -9,3 +9,4 @@ router: cd router && bin/web
 recipes: cd recipes && ruby bin/web
 tasks-backend: cd tasks-backend && bin/web
 tasks-frontend: cd tasks-frontend && bin/web
+exercise: cd exercise && bin/web

@@ -6,7 +6,7 @@
 [budget] - Universal routing
 [recipes] - empty list page
 [recipes] - add categories to recipes
-[recipes] - group and filter by recipes
+[recipes] - group and filter by category
 [recipes] - tests for everything
 [auth] - tests for everything
 [auth] - set secure cookies in prod (behind ssl)
@@ -18,3 +18,4 @@
 [cluster] - Allow "household" settings and management
 [inf] - Setup database backups
 [scoreboard] - Implement and roll Teams into it
+[exercise] - Simple form for tracking different exercises, and daily weight
