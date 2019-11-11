@@ -3,10 +3,11 @@ extern crate env_logger;
 extern crate listenfd;
 extern crate exercise;
 
+use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer, web};
+use exercise::{actions, health};
 use listenfd::ListenFd;
 use std::env;
-use exercise::{health};
 
 fn main() {
     env::set_var("RUST_LOG", "actix_web=info");
@@ -15,10 +16,12 @@ fn main() {
     let mut listenfd = ListenFd::from_env();
     let mut server = HttpServer::new(|| {
         App::new()
+            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
             .route("/health", web::get().to(health::health))
             .service(
                 web::scope("/exercise")
-                    .route("/health", web::get().to(health::health))
+                    .route("/", web::get().to(actions::index))
             )
     });
 
