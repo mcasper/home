@@ -19,6 +19,7 @@ fn main() {
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .route("/health", web::get().to(health::health))
+            .route("/exercise", web::get().to(actions::index))
             .service(
                 web::scope("/exercise")
                     .route("/", web::get().to(actions::index))
