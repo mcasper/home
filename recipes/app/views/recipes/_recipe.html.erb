@@ -1,1 +1,13 @@
-<li class="list-group-item"><%= recipe.name %> - <%= link_to(recipe.url, recipe.url) %></li>
+<li class="list-group-item clickable" onclick="rowClicked(this)" data-recipe-id="<%= recipe.id %>">
+  <%= recipe.name %>
+  <% if recipe.url.present? %>
+    - <%= link_to(recipe.url, recipe.url) %>
+  <% end %>
+</li>
+
+<script>
+function rowClicked(element) {
+  var recipeId = element.dataset.recipeId;
+  window.location = "/recipes/recipes/" + recipeId
+}
+</script>

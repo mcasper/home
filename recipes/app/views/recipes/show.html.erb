@@ -1,0 +1,16 @@
+<div class="container mt-4">
+  <%= link_to("<-- Back to recipes", recipes_path) %>
+  <h1 style="margin: 35px; text-align: center;"><%= recipe.name %></h1>
+</div>
+
+<div class="container">
+  <% if recipe.url.present? %>
+    <p><%= link_to(recipe.url, recipe.url) %></p>
+  <% end %>
+
+  <% if recipe.notes.present? %>
+    <h3>Notes</h3>
+
+    <pre class="mt-4"><%= recipe.notes %></pre>
+  <% end %>
+</div>

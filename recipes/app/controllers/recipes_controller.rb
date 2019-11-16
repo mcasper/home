@@ -21,9 +21,14 @@ class RecipesController < ApplicationController
     end
   end
 
+  def show
+    recipe = Recipe.find(params[:id])
+    render(:show, locals: { recipe: recipe })
+  end
+
   private
 
   def recipe_params
-    params.require(:recipe).permit(:name, :url)
+    params.require(:recipe).permit(:name, :url, :notes)
   end
 end

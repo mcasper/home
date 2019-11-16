@@ -12,3 +12,9 @@
  */
 
  @import 'bootstrap';
+
+.clickable {
+  &:hover {
+    cursor: pointer;
+  }
+}

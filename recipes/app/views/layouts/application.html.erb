@@ -24,6 +24,14 @@
       </div>
     </nav>
 
+    <% flash.each do |key, value| %>
+      <% if key.to_s == "error" %>
+        <%= content_tag :div, value, class: "alert alert-danger text-center" %>
+      <% elsif key.to_s == "info" %>
+        <%= content_tag :div, value, class: "alert alert-success text-center" %>
+      <% end %>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
