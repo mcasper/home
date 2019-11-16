@@ -26,6 +26,35 @@ class RecipesController < ApplicationController
     render(:show, locals: { recipe: recipe })
   end
 
+  def edit
+    recipe = Recipe.find(params[:id])
+    render(:edit, locals: { recipe: recipe })
+  end
+
+  def update
+    recipe = Recipe.find(params[:id])
+
+    if recipe.update(recipe_params)
+      flash[:info] = "Successfully updated recipe"
+      redirect_to(recipe_path(recipe))
+    else
+      flash.now[:error] = "Failed to update recipe"
+      render(:edit, locals: { recipe: recipe })
+    end
+  end
+
+  def destroy
+    recipe = Recipe.find(params[:id])
+
+    if recipe.destroy
+      flash[:info] = "Successfully deleted recipe"
+    else
+      flash[:error] = "Failed to delete recipe"
+    end
+
+    redirect_to(recipes_path)
+  end
+
   private
 
   def recipe_params

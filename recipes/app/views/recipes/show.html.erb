@@ -1,5 +1,13 @@
 <div class="container mt-4">
-  <%= link_to("<-- Back to recipes", recipes_path) %>
+  <div class="d-flex justify-content-between">
+    <%= link_to("<-- Back to recipes", recipes_path) %>
+
+    <div class="d-flex">
+      <%= link_to("Edit", edit_recipe_path(recipe), class: "btn btn-primary mr-4") %>
+      <%= button_to("Delete", recipe_path(recipe), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this recipe?"}) %>
+    </div>
+  </div>
+
   <h1 style="margin: 35px; text-align: center;"><%= recipe.name %></h1>
 </div>
 

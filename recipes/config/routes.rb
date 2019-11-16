@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   get "/health", to: "health#show"
 
   scope :recipes do
-    resources :recipes, only: [:index, :new, :create, :show]
+    resources :recipes
   end
 end
