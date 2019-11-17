@@ -38,3 +38,6 @@ ps aux | grep '[g]o-build' | grep '[e]xe/server' | awk '{print $2}' | xargs kill
 
 echo "Stopping react apps"
 ps aux | grep '[n]ode scripts/start.js' | awk '{print $2}' | xargs kill -9
+
+echo "Stopping exercise"
+ps aux | grep '[t]arget/debug/exercise' | awk '{print $2}' | xargs kill -9
