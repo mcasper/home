@@ -2,15 +2,18 @@
 #
 # Table name: recipes
 #
-#  id         :bigint(8)        not null, primary key
-#  name       :text             not null
-#  notes      :text
-#  url        :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :bigint(8)        not null, primary key
+#  name        :text             not null
+#  notes       :text
+#  url         :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  category_id :bigint(8)
 #
 
 class Recipe < ApplicationRecord
+  belongs_to :category
+
   validates :name, presence: true
   validate :ensure_url_or_notes
 
