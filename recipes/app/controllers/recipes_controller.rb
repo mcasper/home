@@ -1,7 +1,8 @@
 class RecipesController < ApplicationController
   def index
-    recipes = Recipe.all
-    render(:index, locals: { recipes: recipes })
+    recipes = Recipe.all.preload(:category)
+    grouped_recipes = recipes.group_by(&:category)
+    render(:index, locals: { recipes_and_categories: grouped_recipes })
   end
 
   def new

@@ -2,6 +2,9 @@
 
 <div class="container">
   <ul class="list-group">
-    <%= render recipes %>
+    <% recipes_and_categories.each do |category, recipes| %>
+      <h4 class="mt-4"><%= category.name %></h3>
+      <%= render recipes %>
+    <% end %>
   </ul>
 </div>
