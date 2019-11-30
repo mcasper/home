@@ -16,6 +16,11 @@
     </div>
 
     <div class="form-group">
+      <%= f.label :category_id %>
+      <%= f.select :category_id, categories.map { |c| [c.name, c.id] }, {}, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
       <%= f.label :notes %>
       <%= f.text_area :notes, class: "form-control" %>
     </div>

@@ -6,7 +6,8 @@ class RecipesController < ApplicationController
 
   def new
     recipe = Recipe.new
-    render(:new, locals: { recipe: recipe })
+    categories = Category.all
+    render(:new, locals: { recipe: recipe, categories: categories })
   end
 
   def create
@@ -28,7 +29,8 @@ class RecipesController < ApplicationController
 
   def edit
     recipe = Recipe.find(params[:id])
-    render(:edit, locals: { recipe: recipe })
+    categories = Category.all
+    render(:edit, locals: { recipe: recipe, categories: categories })
   end
 
   def update
@@ -58,6 +60,6 @@ class RecipesController < ApplicationController
   private
 
   def recipe_params
-    params.require(:recipe).permit(:name, :url, :notes)
+    params.require(:recipe).permit(:name, :url, :notes, :category_id)
   end
 end
