@@ -13,12 +13,8 @@ ADD mix.lock $APP_HOME/mix.lock
 RUN mix do deps.get, deps.compile
 
 ADD bin    $APP_HOME/bin
-ADD assets $APP_HOME/assets
 ADD config $APP_HOME/config
 ADD priv   $APP_HOME/priv
 ADD lib    $APP_HOME/lib
-
-RUN cd assets && yarn install
-RUN mix compile && mix phx.digest
 
 CMD mix phx.server
