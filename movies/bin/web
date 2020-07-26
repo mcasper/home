@@ -5,4 +5,4 @@ set -eou pipefail
 export PORT=3002
 export MOVIE_DATABASE_URL="postgres://localhost/movies_development?sslmode=disable"
 
-exec $HOME/code/gocode/bin/revel run github.com/mcasper/home/movies
+exec $GOPATH/bin/revel run -a github.com/mcasper/home/movies

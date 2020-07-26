@@ -1,27 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-set -eou pipefail
+require 'yaml'
 
-APPS=(budget home movies scoreboard-frontend scoreboard-backend auth router recipes budget-frontend)
-for app in ${APPS[@]}; do
-  pushd $app
+home_config = YAML.load_file("home.yaml")
+apps = home_config.fetch("apps")
 
-  if [ ! -x bin/web ]; then
-    echo "${app} doesn't have an executable bin/web script, this is a requirement"
-    exit 1
-  fi
+apps.each do |app, values|
+  puts app
+  Dir.chdir(app) do
+    if !File.exist?("bin/web")
+      abort("#{app} doesn't have an executable bin/web script, this is a requirement")
+    end
 
-  if [ ! -x bin/test ]; then
-    echo "${app} doesn't have an executable bin/test script, this is a requirement"
-    exit 1
-  fi
+    if !File.exist?("bin/test")
+      abort("#{app} doesn't have an executable bin/test script, this is a requirement")
+    end
 
-  if [ -x bin/setup ]; then
-    bin/setup
-  else
-    echo "${app} doesn't have an executable bin/setup script, this is a requirement"
-    exit 1
-  fi
-
-  popd
-done
+    if !File.exist?("bin/setup")
+      abort("#{app} doesn't have an executable bin/setup script, this is a requirement")
+    else
+      system("bin/setup", out: $stdout, err: :out)
+    end
+  end
+end

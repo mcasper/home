@@ -5,4 +5,4 @@ set -eou pipefail
 export TAG=5d25f466c3410c0dfa735d7d4358beb76b2da507 # 1.8
 
 docker pull envoyproxy/envoy:$TAG
-docker run --rm -v $HOME/code/home/home/router/envoy-development.yml:/etc/envoy/envoy.yaml -p 3000:3000 -p 9901:9901 envoyproxy/envoy:$TAG
+docker run --rm -v $HOME/code/mcasper/home/router/envoy-development.yaml:/etc/envoy/envoy.yaml -p 3000:3000 -p 9901:9901 envoyproxy/envoy:$TAG

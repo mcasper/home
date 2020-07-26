@@ -1,4 +1,5 @@
 #!/bin/bash
 
+yarn
 elm make src/*.elm
 rm index.html

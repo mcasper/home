@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
       token = decode_jwt
       session[:user_name] = token.first.fetch("name")
     rescue JWT::DecodeError
-      redirect_to("#{ROOT_DOMAIN}/auth/login?returnTo=#{ROOT_DOMAIN}/recipes")
+      redirect_to("/auth/login?returnTo=#{ROOT_DOMAIN}/recipes")
     end
   end
 

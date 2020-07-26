@@ -21,8 +21,6 @@ Bundler.require(*Rails.groups)
 
 Dotenv::Railtie.load
 
-ROOT_DOMAIN = ENV.fetch("ROOT_DOMAIN")
-
 module Recipes
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
