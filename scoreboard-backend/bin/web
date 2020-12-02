@@ -1,5 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-set -eou pipefail
+require 'bundler'
 
-exec systemfd --no-pid -s http::3003 -- cargo watch -x run
+Bundler.with_clean_env do
+  exec("bundle exec rails s --port 3003")
+end
