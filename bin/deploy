@@ -10,6 +10,7 @@ TAG=$(git rev-parse HEAD)
 
 scp docker-compose-prod.yml root@68.183.251.146:docker-compose.yml
 bin/ssh TAG=$TAG docker-compose run --rm recipes bundle exec rails db:create db:migrate
+bin/ssh TAG=$TAG docker-compose run --rm scoreboard-backend bundle exec rails db:create db:migrate
 bin/ssh TAG=$TAG docker-compose run --rm budget-backend mix do ecto.create, ecto.migrate
 bin/ssh TAG=$TAG docker-compose up --force-recreate --remove-orphans -d
 
