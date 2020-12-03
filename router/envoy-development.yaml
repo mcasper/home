@@ -22,6 +22,11 @@ static_resources:
               - "*"
               routes:
               - match:
+                  prefix: /scoreboard-backend
+                route:
+                  cluster: scoreboard-backend
+
+              - match:
                   prefix: /scoreboard
                 route:
                   cluster: scoreboard-frontend
@@ -83,6 +88,16 @@ static_resources:
     - socket_address:
         address: docker.for.mac.localhost
         port_value: 3004
+
+  - name: scoreboard-backend
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: docker.for.mac.localhost
+        port_value: 3003
 
   - name: auth
     connect_timeout: 2.5s

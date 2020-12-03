@@ -1,7 +1,3 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-require 'bundler'
-
-Bundler.with_clean_env do
-  exec("bundle exec rails s --port 3007")
-end
+bundle exec rails s --port 3007

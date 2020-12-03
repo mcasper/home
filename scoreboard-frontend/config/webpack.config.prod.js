@@ -54,7 +54,7 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new TerserPlugin({
+      new TerserWebpackPlugin({
         terserOptions: {
           // ES5 is required in the minified code if you want compatibility with IE11,
           // otherwise you can bump it up to ES8

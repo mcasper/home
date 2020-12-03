@@ -22,6 +22,11 @@ static_resources:
               - "*"
               routes:
               - match:
+                  prefix: /scoreboard-backend
+                route:
+                  cluster: scoreboard-backend
+
+              - match:
                   prefix: /scoreboard
                 route:
                   cluster: scoreboard-frontend
@@ -89,6 +94,23 @@ static_resources:
     hosts:
     - socket_address:
         address: scoreboard-frontend
+        port_value: 80
+
+  - name: scoreboard-backend
+    health_checks:
+      timeout: 1s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 1
+      http_health_check:
+        path: "/health"
+    connect_timeout: 2.5s
+    type: strict_dns
+    lb_policy: round_robin
+    max_requests_per_connection: 1
+    hosts:
+    - socket_address:
+        address: scoreboard-backend
         port_value: 80
 
   - name: auth

@@ -7,7 +7,7 @@ RUN \
   nodejs \
   postgresql-dev
 
-ENV APP_HOME /recipes
+ENV APP_HOME /scoreboard
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
@@ -28,5 +28,3 @@ ADD db             $APP_HOME/db
 ADD lib            $APP_HOME/lib
 ADD public         $APP_HOME/public
 ADD app            $APP_HOME/app
-
-RUN bundle exec rails assets:precompile

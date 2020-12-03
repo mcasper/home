@@ -8,7 +8,8 @@
     "make": "elm make",
     "repl": "elm repl",
     "reactor": "elm reactor",
-    "test": "elm-test"
+    "test": "elm-test",
+    "api": "elm-graphql http://localhost:3003/scoreboard-backend/graphql --base Backend"
   },
   "devDependencies": {
     "@babel/cli": "7.1.2",
@@ -43,12 +44,15 @@
     "string-replace-loader": "^2.1.1",
     "style-loader": "^0.21.0",
     "sw-precache-webpack-plugin": "^0.11.5",
-    "terser-webpack-plugin": "^2.3.1",
+    "terser-webpack-plugin": "^5.0.3",
     "url-loader": "^1.0.1",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.3.1",
     "webpack-manifest-plugin": "^2.0.3",
     "whatwg-fetch": "2.0.4"
+  },
+  "dependencies": {
+    "@dillonkearns/elm-graphql": "^4.0.5"
   }
 }

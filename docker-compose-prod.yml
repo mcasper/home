@@ -5,6 +5,7 @@ services:
     network_mode: bridge
     links:
        - scoreboard-frontend
+       - scoreboard-backend
        - home
        - recipes
        - budget-backend
@@ -43,6 +44,20 @@ services:
     network_mode: bridge
     env_file: ./.env
     container_name: scoreboard-frontend
+
+  scoreboard-backend:
+    image: mcasper/home-scoreboard-backend:${TAG}
+    command: bundle exec rails s -b 0.0.0.0 -p 80
+    restart: on-failure
+    network_mode: bridge
+    env_file: ./.env
+    links:
+      - db
+    environment:
+      RAILS_LOG_TO_STDOUT: "true"
+      RAILS_SERVE_STATIC_FILES: "true"
+      JWT_KEY_PATH: "/keys/key.pem"
+    container_name: scoreboard-backend
 
   auth:
     image: mcasper/home-auth:${TAG}

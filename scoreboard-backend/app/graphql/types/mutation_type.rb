@@ -1,10 +1,15 @@
 module Types
   class MutationType < Types::BaseObject
-    # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World"
+    field :create_score_change, [Types::MatchType], null: false,
+      description: "An example field added by the generator" do
+      argument :player, String, required: true
+      argument :change, Integer, required: true
+      argument :match_id, Integer, required: true
+    end
+    def create_score_change(player:, change:, match_id:)
+      match = Match.find(match_id)
+      ScoreChange.create!(match: match, player: player, change: change)
+      Match.preload(:score_changes).all
     end
   end
 end
