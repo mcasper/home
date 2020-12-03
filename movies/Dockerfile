@@ -1,4 +1,4 @@
-FROM golang:1.11-alpine
+FROM golang:1.15-alpine
 
 RUN \
   apk add --update --no-cache --virtual .build-deps \

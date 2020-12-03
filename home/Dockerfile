@@ -1,15 +1,17 @@
 FROM node as builder
 
+WORKDIR /app
+
 RUN npm install create-elm-app
 
-ADD elm.json elm.json
-ADD src/ src/
-ADD public/ public/
+ADD elm.json /app/elm.json
+ADD src/ /app/src/
+ADD public/ /app/public/
 
 ENV PUBLIC_URL=/
-RUN /node_modules/create-elm-app/bin/elm-app-cli.js build
+RUN /app/node_modules/create-elm-app/bin/elm-app-cli.js build
 
 FROM nginx
 
-COPY --from=builder build/ /usr/share/nginx/html
+COPY --from=builder /app/build/ /usr/share/nginx/html
 RUN echo "OK" > /usr/share/nginx/html/health
