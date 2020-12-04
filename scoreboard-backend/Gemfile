@@ -8,7 +8,7 @@ gem 'graphql'
 gem 'pg'
 gem 'puma'
 gem 'rails'
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data'
 
 group :development, :test do
   gem 'pry-rails'
