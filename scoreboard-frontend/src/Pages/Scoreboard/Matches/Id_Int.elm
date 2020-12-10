@@ -72,19 +72,6 @@ scoreChangeSelection =
         |> SelectionSet.with ScoreChange.change
 
 
-webRootFromConfig : Shared.Config -> String
-webRootFromConfig config =
-    case config.node_env of
-        "development" ->
-            "http://localhost:3000"
-
-        "production" ->
-            "https://casper.coffee"
-
-        _ ->
-            "http://localhost:3000"
-
-
 
 -- INIT
 
@@ -106,7 +93,7 @@ init shared url =
       , url = url
       , getMatchResponse = NotAsked
       }
-    , getMatch url.params.id (webRootFromConfig shared.config ++ "/scoreboard-backend/graphql")
+    , getMatch url.params.id "/scoreboard-backend/graphql"
     )
 
 
@@ -140,7 +127,7 @@ update msg model =
             ( { model | getMatchResponse = response }, Cmd.none )
 
         ScoreChanged matchId player change ->
-            ( model, createScoreChange (webRootFromConfig model.config ++ "/scoreboard-backend/graphql") player change matchId )
+            ( model, createScoreChange "/scoreboard-backend/graphql" player change matchId )
 
 
 save : Model -> Shared.Model -> Shared.Model

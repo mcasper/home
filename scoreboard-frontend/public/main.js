@@ -17,7 +17,6 @@ function getCookie(cname) {
 var app = Elm.Main.init({
   node: document.getElementById('root'),
   flags: {
-    node_env: "development",
     session: getCookie("home_session"),
   }
 });

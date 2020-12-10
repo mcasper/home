@@ -72,19 +72,6 @@ scoreChangeSelection =
         |> SelectionSet.with ScoreChange.change
 
 
-webRootFromConfig : Shared.Config -> String
-webRootFromConfig config =
-    case config.node_env of
-        "development" ->
-            "http://localhost:3000"
-
-        "production" ->
-            "https://casper.coffee"
-
-        _ ->
-            "http://localhost:3000"
-
-
 
 -- INIT
 
@@ -106,7 +93,7 @@ init shared url =
       , url = url
       , getMatchesResponse = NotAsked
       }
-    , getMatches (webRootFromConfig shared.config ++ "/scoreboard-backend/graphql")
+    , getMatches "/scoreboard-backend/graphql"
     )
 
 

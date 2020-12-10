@@ -33,8 +33,7 @@ type alias Flags =
 
 
 type alias Config =
-    { node_env : String
-    , session : String
+    { session : String
     }
 
 
