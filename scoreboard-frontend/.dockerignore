@@ -1,1 +1,4 @@
 node_modules/
+public/scoreboard/dist
+elm-stuff
+public/dist
