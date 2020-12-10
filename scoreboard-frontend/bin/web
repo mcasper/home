@@ -2,9 +2,6 @@
 
 set -eou pipefail
 
-export BROWSER=none
-export PORT=3004
-export PUBLIC_URL=/scoreboard
 export NODE_ENV=development
 
-exec node_modules/.bin/webpack-dev-server --config config/webpack.config.dev.js -d --port $PORT
+exec yarn run start

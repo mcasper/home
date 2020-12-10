@@ -19,6 +19,20 @@ import Graphql.SelectionSet exposing (SelectionSet)
 import Json.Decode as Decode exposing (Decoder)
 
 
+type alias MatchRequiredArguments =
+    { id : Backend.ScalarCodecs.Id }
+
+
+{-| An example field added by the generator
+-}
+match :
+    MatchRequiredArguments
+    -> SelectionSet decodesTo Backend.Object.Match
+    -> SelectionSet decodesTo RootQuery
+match requiredArgs object_ =
+    Object.selectionForCompositeField "match" [ Argument.required "id" requiredArgs.id (Backend.ScalarCodecs.codecs |> Backend.Scalar.unwrapEncoder .codecId) ] object_ identity
+
+
 {-| An example field added by the generator
 -}
 matches :

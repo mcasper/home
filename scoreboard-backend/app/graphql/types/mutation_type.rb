@@ -1,6 +1,6 @@
 module Types
   class MutationType < Types::BaseObject
-    field :create_score_change, [Types::MatchType], null: false,
+    field :create_score_change, Types::MatchType, null: false,
       description: "An example field added by the generator" do
       argument :player, String, required: true
       argument :change, Integer, required: true
@@ -9,7 +9,7 @@ module Types
     def create_score_change(player:, change:, match_id:)
       match = Match.find(match_id)
       ScoreChange.create!(match: match, player: player, change: change)
-      Match.preload(:score_changes).all
+      match
     end
   end
 end

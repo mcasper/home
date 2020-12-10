@@ -9,6 +9,7 @@ gem 'pg'
 gem 'puma'
 gem 'rails'
 gem 'tzinfo-data'
+gem 'rack-cors'
 
 group :development, :test do
   gem 'pry-rails'

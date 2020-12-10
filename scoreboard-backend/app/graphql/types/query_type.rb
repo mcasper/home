@@ -8,5 +8,13 @@ module Types
     def matches
       Match.preload(:score_changes).all
     end
+
+    field :match, Types::MatchType, null: false,
+      description: "An example field added by the generator" do
+      argument :id, ID, required: true
+    end
+    def match(id:)
+      Match.find(id)
+    end
   end
 end

@@ -1,245 +1,148 @@
-module Main exposing (Model, Msg(..), init, main, update, view)
+module Main exposing (main)
 
-import Backend.Mutation as Mutation
-import Backend.Object
-import Backend.Object.Match as Match
-import Backend.Object.ScoreChange as ScoreChange
-import Backend.Query as Query
-import Backend.Scalar exposing (Id(..))
 import Browser
 import Browser.Navigation as Nav
-import Graphql.Http
-import Graphql.SelectionSet as SelectionSet exposing (SelectionSet)
-import Html exposing (Html, a, button, div, h1, img, nav, p, text, ul)
-import Html.Attributes exposing (class, href, src, style, title)
-import Html.Events exposing (onClick)
-import Http
-import Json.Decode as Json
-import RemoteData exposing (RemoteData(..))
-import Url
-import Url.Parser exposing ((</>), (<?>), Parser, int, map, oneOf, s, string, top)
-import Url.Parser.Query as Query
+import Shared exposing (Flags)
+import Spa.Document as Document exposing (Document)
+import Spa.Generated.Pages as Pages
+import Spa.Generated.Route as Route exposing (Route)
+import Url exposing (Url)
 
 
-idToInt : Id -> Int
-idToInt (Id id) =
-    String.toInt id
-        |> Maybe.withDefault 0
+main : Program Flags Model Msg
+main =
+    Browser.application
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view >> Document.toBrowserDocument
+        , onUrlRequest = LinkClicked
+        , onUrlChange = UrlChanged
+        }
 
 
-type alias Match =
-    { id : Int
-    , game : String
-    , playerOne : String
-    , playerTwo : String
-    , scoreChanges : List ScoreChange
-    }
 
-
-type alias ScoreChange =
-    { player : String
-    , change : Int
-    }
-
-
-matchSelection : SelectionSet Match Backend.Object.Match
-matchSelection =
-    SelectionSet.succeed Match
-        |> SelectionSet.with (Match.id |> SelectionSet.map idToInt)
-        |> SelectionSet.with Match.game
-        |> SelectionSet.with Match.playerOne
-        |> SelectionSet.with Match.playerTwo
-        |> SelectionSet.with (Match.scoreChanges scoreChangeSelection)
-
-
-scoreChangeSelection : SelectionSet ScoreChange Backend.Object.ScoreChange
-scoreChangeSelection =
-    SelectionSet.succeed ScoreChange
-        |> SelectionSet.with ScoreChange.player
-        |> SelectionSet.with ScoreChange.change
-
-
-webRootFromConfig : Config -> String
-webRootFromConfig config =
-    case config.node_env of
-        "development" ->
-            "http://localhost:3000"
-
-        "production" ->
-            "https://casper.coffee"
-
-        _ ->
-            "http://localhost:3000"
-
-
-type alias Config =
-    { node_env : String
-    , session : String
-    }
+-- INIT
 
 
 type alias Model =
-    { config : Config
-    , url : Url.Url
-    , getMatchesResponse : RemoteData (Graphql.Http.Error (List Match)) (List Match)
+    { shared : Shared.Model
+    , page : Pages.Model
     }
 
 
-init : Config -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init config url key =
-    ( { config = config
-      , url = url
-      , getMatchesResponse = NotAsked
-      }
-    , getMatches (webRootFromConfig config ++ "/scoreboard-backend/graphql")
+init : Flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+    let
+        ( shared, sharedCmd ) =
+            Shared.init flags url key
+
+        ( page, pageCmd ) =
+            Pages.init (fromUrl url) shared
+
+        savedShare =
+            Pages.save page shared
+    in
+    ( Model savedShare page
+    , Cmd.batch
+        [ Cmd.map Shared sharedCmd
+        , Cmd.map Pages pageCmd
+        ]
     )
 
 
-getMatches : String -> Cmd Msg
-getMatches graphqlUrl =
-    Query.matches matchSelection
-        |> Graphql.Http.queryRequest graphqlUrl
-        |> Graphql.Http.send (RemoteData.fromResult >> GotMatches)
 
-
-createScoreChange : String -> String -> Int -> Int -> Cmd Msg
-createScoreChange graphqlUrl player change matchId =
-    Mutation.createScoreChange { player = player, change = change, matchId = matchId } matchSelection
-        |> Graphql.Http.mutationRequest graphqlUrl
-        |> Graphql.Http.send (RemoteData.fromResult >> GotMatches)
-
-
-
----- UPDATE ----
+-- UPDATE
 
 
 type Msg
-    = NoOp
-    | UrlChanged Url.Url
-    | LinkClicked Browser.UrlRequest
-    | GotMatches (RemoteData (Graphql.Http.Error (List Match)) (List Match))
-    | ScoreChanged Int String Int
+    = LinkClicked Browser.UrlRequest
+    | UrlChanged Url
+    | Shared Shared.Msg
+    | Pages Pages.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
+        LinkClicked (Browser.Internal url) ->
+            ( model
+            , Nav.pushUrl model.shared.key (Url.toString url)
+            )
 
-        UrlChanged _ ->
-            ( model, Cmd.none )
+        LinkClicked (Browser.External href) ->
+            ( model
+            , Nav.load href
+            )
 
-        LinkClicked _ ->
-            ( model, Cmd.none )
+        UrlChanged url ->
+            let
+                original =
+                    model.shared
 
-        GotMatches response ->
-            ( { model | getMatchesResponse = response }, Cmd.none )
+                shared =
+                    { original | url = url }
 
-        ScoreChanged matchId player change ->
-            ( model, createScoreChange (webRootFromConfig model.config ++ "/scoreboard-backend/graphql") player change matchId )
+                ( page, pageCmd ) =
+                    Pages.init (fromUrl url) shared
+            in
+            ( { model | page = page, shared = Pages.save page shared }
+            , Cmd.map Pages pageCmd
+            )
+
+        Shared sharedMsg ->
+            let
+                ( shared, sharedCmd ) =
+                    Shared.update sharedMsg model.shared
+
+                ( page, pageCmd ) =
+                    Pages.load model.page shared
+            in
+            ( { model | page = page, shared = shared }
+            , Cmd.batch
+                [ Cmd.map Shared sharedCmd
+                , Cmd.map Pages pageCmd
+                ]
+            )
+
+        Pages pageMsg ->
+            let
+                ( page, pageCmd ) =
+                    Pages.update pageMsg model.page
+
+                shared =
+                    Pages.save page model.shared
+            in
+            ( { model | page = page, shared = shared }
+            , Cmd.map Pages pageCmd
+            )
 
 
-
----- VIEW ----
-
-
-view : Model -> Browser.Document Msg
+view : Model -> Document Msg
 view model =
-    { title = "Home - Scoreboard"
-    , body = [ viewBody model ]
-    }
-
-
-viewBody : Model -> Html Msg
-viewBody model =
-    div [ style "height" "100%" ]
-        [ viewNav
-        , h1 [ style "margin" "35px" ] [ text "Scoreboard" ]
-        , bodyView model.getMatchesResponse
-        ]
-
-
-bodyView : RemoteData (Graphql.Http.Error (List Match)) (List Match) -> Html Msg
-bodyView response =
-    case response of
-        NotAsked ->
-            text "Not Asked"
-
-        Loading ->
-            text "Loading..."
-
-        Failure _ ->
-            text "Something failed"
-
-        Success matches ->
-            div [ style "height" "100%" ] (List.map matchView matches)
-
-
-matchView : Match -> Html Msg
-matchView match =
-    div [ class "col h-100" ]
-        [ div [ class "player-one" ]
-            [ div [ class "col justify-content-center align-content-center" ]
-                [ p [ class "name" ] [ text match.playerOne ]
-                , p [ class "score" ] [ text (String.fromInt <| scoreForPlayer match.scoreChanges match.playerOne) ]
-                , div [ class "row h-100 justify-content-center" ]
-                    [ button [ class "btn btn-light w-25 h-25", onClick (ScoreChanged match.id match.playerOne -1) ] [ text "-" ]
-                    , button [ class "btn btn-light w-25 h-25 ml-4", onClick (ScoreChanged match.id match.playerOne 1) ] [ text "+" ]
-                    ]
-                ]
-            ]
-        , div [ class "player-two" ]
-            [ div [ class "col" ]
-                [ p [ class "name" ] [ text match.playerTwo ]
-                , p [ class "score" ] [ text (String.fromInt <| scoreForPlayer match.scoreChanges match.playerTwo) ]
-                , div [ class "row h-100 justify-content-center" ]
-                    [ button [ class "btn btn-light w-25 h-25", onClick (ScoreChanged match.id match.playerTwo -1) ] [ text "-" ]
-                    , button [ class "btn btn-light w-25 h-25 ml-4", onClick (ScoreChanged match.id match.playerTwo 1) ] [ text "+" ]
-                    ]
-                ]
-            ]
-        ]
-
-
-scoreForPlayer : List ScoreChange -> String -> Int
-scoreForPlayer scoreChanges player =
-    List.foldl
-        (\scoreChange acc ->
-            if scoreChange.player == player then
-                acc + scoreChange.change
-
-            else
-                acc
-        )
-        0
-        scoreChanges
-
-
-viewNav =
-    nav [ class "navbar navbar-dark bg-dark", style "height" "70px", style "color" "white" ]
-        [ div []
-            [ a [ href "/scoreboard", style "text-decoration" "none", style "color" "white" ] [ text "Scoreboard" ]
-            , text "\n|\n"
-            , a [ href "/", style "text-decoration" "none", style "color" "white" ] [ text "Back to Home" ]
-            ]
-        , div []
-            [ a [ href "/scoreboard/matches/new", style "text-decoration" "none", style "color" "white" ]
-                [ text "New"
-                ]
-            , text "\n|\n"
-            , a [ href "/auth/signout", style "text-decoration" "none", style "color" "white" ] [ text "Sign Out" ]
-            ]
-        ]
-
-
-main : Program Config Model Msg
-main =
-    Browser.application
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = always Sub.none
-        , onUrlChange = UrlChanged
-        , onUrlRequest = LinkClicked
+    Shared.view
+        { page =
+            Pages.view model.page
+                |> Document.map Pages
+        , toMsg = Shared
         }
+        model.shared
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [ Shared.subscriptions model.shared
+            |> Sub.map Shared
+        , Pages.subscriptions model.page
+            |> Sub.map Pages
+        ]
+
+
+
+-- URL
+
+
+fromUrl : Url -> Route
+fromUrl =
+    Route.fromUrl >> Maybe.withDefault Route.NotFound

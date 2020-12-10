@@ -31,6 +31,6 @@ type alias CreateScoreChangeRequiredArguments =
 createScoreChange :
     CreateScoreChangeRequiredArguments
     -> SelectionSet decodesTo Backend.Object.Match
-    -> SelectionSet (List decodesTo) RootMutation
+    -> SelectionSet decodesTo RootMutation
 createScoreChange requiredArgs object_ =
-    Object.selectionForCompositeField "createScoreChange" [ Argument.required "player" requiredArgs.player Encode.string, Argument.required "change" requiredArgs.change Encode.int, Argument.required "matchId" requiredArgs.matchId Encode.int ] object_ (identity >> Decode.list)
+    Object.selectionForCompositeField "createScoreChange" [ Argument.required "player" requiredArgs.player Encode.string, Argument.required "change" requiredArgs.change Encode.int, Argument.required "matchId" requiredArgs.matchId Encode.int ] object_ identity
