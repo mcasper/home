@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "/health", to: "health#show"
+
   scope "scoreboard-backend" do
     post "/graphql", to: "graphql#execute"
   end
