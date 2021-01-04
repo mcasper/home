@@ -118,6 +118,7 @@ createScoreChange graphqlUrl player change matchId =
 type Msg
     = GotMatch (RemoteData (Graphql.Http.Error Match) Match)
     | ScoreChanged Int String Int
+    | SignOutClicked
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -128,6 +129,9 @@ update msg model =
 
         ScoreChanged matchId player change ->
             ( model, createScoreChange "/scoreboard-backend/graphql" player change matchId )
+
+        SignOutClicked ->
+            ( model, Nav.load "/auth/signout" )
 
 
 save : Model -> Shared.Model -> Shared.Model
@@ -229,10 +233,6 @@ viewNav =
             , a [ href "/scoreboard", style "text-decoration" "none", style "color" "white" ] [ text "Back to Matches" ]
             ]
         , div []
-            [ a [ href "/scoreboard/matches/new", style "text-decoration" "none", style "color" "white" ]
-                [ text "New"
-                ]
-            , text "\n|\n"
-            , a [ href "/auth/signout", style "text-decoration" "none", style "color" "white" ] [ text "Sign Out" ]
+            [ a [ onClick SignOutClicked, href "#", style "text-decoration" "none", style "color" "white" ] [ text "Sign Out" ]
             ]
         ]

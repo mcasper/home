@@ -110,6 +110,8 @@ getMatches graphqlUrl =
 
 type Msg
     = GotMatches (RemoteData (Graphql.Http.Error (List Match)) (List Match))
+    | HomeClicked
+    | SignOutClicked
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -117,6 +119,12 @@ update msg model =
     case msg of
         GotMatches response ->
             ( { model | getMatchesResponse = response }, Cmd.none )
+
+        HomeClicked ->
+            ( model, Nav.load "/" )
+
+        SignOutClicked ->
+            ( model, Nav.load "/auth/signout" )
 
 
 save : Model -> Shared.Model -> Shared.Model
@@ -182,13 +190,9 @@ viewNav =
         [ div []
             [ a [ href "/scoreboard", style "text-decoration" "none", style "color" "white" ] [ text "Scoreboard" ]
             , text "\n|\n"
-            , a [ href "/", style "text-decoration" "none", style "color" "white" ] [ text "Back to Home" ]
+            , a [ onClick HomeClicked, href "#", style "text-decoration" "none", style "color" "white" ] [ text "Back to Home" ]
             ]
         , div []
-            [ a [ href "/scoreboard/matches/new", style "text-decoration" "none", style "color" "white" ]
-                [ text "New"
-                ]
-            , text "\n|\n"
-            , a [ href "/auth/signout", style "text-decoration" "none", style "color" "white" ] [ text "Sign Out" ]
+            [ a [ onClick SignOutClicked, href "#", style "text-decoration" "none", style "color" "white" ] [ text "Sign Out" ]
             ]
         ]
