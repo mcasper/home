@@ -105,7 +105,7 @@ services:
 
   movies:
     image: mcasper/home-movies:${TAG}
-    command: revel run github.com/mcasper/home/movies prod
+    command: ash run.sh
     restart: on-failure
     network_mode: bridge
     links:

@@ -15,3 +15,6 @@ ADD migrations $GOPATH/src/github.com/mcasper/home/movies/migrations
 ADD public $GOPATH/src/github.com/mcasper/home/movies/public
 
 WORKDIR $GOPATH/src/github.com/mcasper/home/movies/
+
+RUN revel package github.com/mcasper/home/movies
+RUN tar xzvf movies.tar.gz
