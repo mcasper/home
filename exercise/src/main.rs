@@ -30,7 +30,7 @@ fn main() {
         server.listen(l).unwrap()
     } else {
         let port = env::var("PORT").unwrap();
-        server.bind(format!("127.0.0.1:{}", port)).unwrap()
+        server.bind(format!("0.0.0.0:{}", port)).unwrap()
     };
 
     server.run().unwrap();
