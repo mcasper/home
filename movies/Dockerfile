@@ -16,5 +16,5 @@ ADD public $GOPATH/src/github.com/mcasper/home/movies/public
 
 WORKDIR $GOPATH/src/github.com/mcasper/home/movies/
 
-RUN revel package github.com/mcasper/home/movies
+RUN revel package github.com/mcasper/home/movies --run-mode prod
 RUN tar xzvf movies.tar.gz
