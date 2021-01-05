@@ -39,7 +39,7 @@ services:
 
   scoreboard-frontend:
     image: mcasper/home-scoreboard-frontend:${TAG}
-    command: nginx -g "daemon off;"
+    command: nginx
     restart: on-failure
     network_mode: bridge
     env_file: ./.env
